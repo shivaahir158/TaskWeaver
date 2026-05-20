@@ -955,7 +955,7 @@ def main():
 
         family, example_dag = test_data[0]
 
-    # Use HEFT schedule as example, but you can change this to LLM-Heuristic or GNN.
+    # Using HEFT schedule as example, but can be change to LLM-Heuristic or GNN.
         example_schedule = heft_schedule(example_dag, args.num_processors)
 
         insights = llm_schedule_insights(
