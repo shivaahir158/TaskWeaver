@@ -1,41 +1,62 @@
-#!/usr/bin/env python3
 """
 sample_dag_scheduler_eval.py
 
-Single-file demo for DAG scheduling evaluation:
-- Generates sample synthetic DAGs: ER, BA, WS, and motif DAGs: chain, fork, join, diamond.
-- Extracts structural features and simple motif counts.
-- Evaluates classical baselines: HEFT-like and CPOP-like list scheduling.
-- Trains/evaluates a Decima-style RL scheduler using a small GNN policy with REINFORCE.
-- Evaluates a GNN supervised scheduler trained to imitate HEFT priorities.
-- Optionally calls an LLM using OPENAI_API_KEY to propose feature weights for a priority heuristic.
+Single-file DAG scheduling evaluation framework.
 
-This is a research-demo script, not a full reproduction of Decima.
-Decima is approximated here as: GNN embeddings + policy network + reinforcement learning over ready-task decisions.
+What this script does:
+1. Generates synthetic DAGs:
+   - ER, BA, WS random DAGs
+   - motif DAGs: chain, fork, join, diamond
+
+2. Evaluates scheduling methods:
+   - HEFT
+   - CPOP
+   - LLM-Heuristic
+   - LLM+BO-Heuristic
+   - GNN-Imitation
+   - Decima-like-RL
+
+3. Uses LLM in two roles:
+   Role 1: Generate initial weights for an interpretable priority function.
+   Role 2: Analyze schedule and provide PPA-aware insights.
+
+4. Uses Bayesian Optimization:
+   - Starts from LLM-generated weights
+   - Optimizes the weights on training DAGs
+   - Evaluates optimized weights on unseen test DAGs
+
+Install:
+    pip install networkx numpy torch openai scikit-optimize
+
+PowerShell OpenAI key:
+    $env:OPENAI_API_KEY="your_key_here"
 
 Run:
-    pip install networkx numpy torch openai
-    export OPENAI_API_KEY="your-key"        # optional
-    python sample_dag_scheduler_eval.py --use-llm --train-episodes 80
+    python sample_dag_scheduler_eval_rewritten.py --use-llm
 
-Without OpenAI:
-    python sample_dag_scheduler_eval.py --train-episodes 80
+Without LLM:
+    python sample_dag_scheduler_eval_rewritten.py
 """
 
 import argparse
 import json
-import math
 import os
 import random
 import time
 from dataclasses import dataclass
 from typing import Dict, List, Tuple, Any, Optional
-from skopt import gp_minimize
-from skopt.space import Real
-from skopt.utils import use_named_args
 
 import networkx as nx
 import numpy as np
+
+try:
+    from skopt import gp_minimize
+    from skopt.space import Real
+    from skopt.utils import use_named_args
+except Exception:
+    gp_minimize = None
+    Real = None
+    use_named_args = None
 
 try:
     import torch
@@ -52,9 +73,9 @@ except Exception:
     OpenAI = None
 
 
-# -----------------------------
+# ============================================================
 # Reproducibility
-# -----------------------------
+# ============================================================
 
 def set_seed(seed: int = 7) -> None:
     random.seed(seed)
@@ -63,32 +84,42 @@ def set_seed(seed: int = 7) -> None:
         torch.manual_seed(seed)
 
 
-# -----------------------------
+# ============================================================
 # DAG generation
-# -----------------------------
+# ============================================================
 
 def ensure_dag_by_orientation(g: nx.Graph) -> nx.DiGraph:
-    """Orient undirected edges from lower topological index to higher index."""
+    """Convert an undirected graph into a DAG by orienting edges."""
     order = list(g.nodes())
     random.shuffle(order)
     pos = {node: i for i, node in enumerate(order)}
+
     dag = nx.DiGraph()
     dag.add_nodes_from(g.nodes())
+
     for u, v in g.edges():
         if pos[u] < pos[v]:
             dag.add_edge(u, v)
         else:
             dag.add_edge(v, u)
-    return nx.transitive_reduction(dag) if nx.is_directed_acyclic_graph(dag) else dag
+
+    if nx.is_directed_acyclic_graph(dag):
+        return nx.transitive_reduction(dag)
+    return dag
 
 
 def add_costs(dag: nx.DiGraph, num_processors: int = 4) -> nx.DiGraph:
-    """Add heterogeneous execution costs and communication costs."""
+    """Add heterogeneous processor execution costs and edge communication costs."""
     for v in dag.nodes():
         base = random.randint(5, 30)
-        dag.nodes[v]["costs"] = [max(1, int(base * random.uniform(0.7, 1.4))) for _ in range(num_processors)]
+        dag.nodes[v]["costs"] = [
+            max(1, int(base * random.uniform(0.7, 1.4)))
+            for _ in range(num_processors)
+        ]
+
     for u, v in dag.edges():
         dag.edges[u, v]["comm"] = random.randint(1, 10)
+
     return dag
 
 
@@ -103,13 +134,22 @@ def random_er_dag(n: int, p: float, num_processors: int) -> nx.DiGraph:
 
 
 def random_ba_dag(n: int, m: int, num_processors: int) -> nx.DiGraph:
-    g = nx.barabasi_albert_graph(n, max(1, min(m, n - 1)), seed=random.randint(0, 10_000))
+    g = nx.barabasi_albert_graph(
+        n,
+        max(1, min(m, n - 1)),
+        seed=random.randint(0, 10_000),
+    )
     return add_costs(ensure_dag_by_orientation(g), num_processors)
 
 
 def random_ws_dag(n: int, k: int, p: float, num_processors: int) -> nx.DiGraph:
     k = min(k if k % 2 == 0 else k + 1, n - 1)
-    g = nx.watts_strogatz_graph(n, k, p, seed=random.randint(0, 10_000))
+    g = nx.watts_strogatz_graph(
+        n,
+        k,
+        p,
+        seed=random.randint(0, 10_000),
+    )
     return add_costs(ensure_dag_by_orientation(g), num_processors)
 
 
@@ -138,21 +178,48 @@ def motif_join(width: int, num_processors: int) -> nx.DiGraph:
 def motif_diamond(num_processors: int) -> nx.DiGraph:
     dag = nx.DiGraph()
     dag.add_nodes_from(range(6))
-    dag.add_edges_from([(0, 1), (0, 2), (1, 3), (2, 3), (3, 4), (3, 5)])
+    dag.add_edges_from([
+        (0, 1),
+        (0, 2),
+        (1, 3),
+        (2, 3),
+        (3, 4),
+        (3, 5),
+    ])
     return add_costs(dag, num_processors)
 
 
-def build_dataset(num_graphs: int, n_values: List[int], num_processors: int) -> List[Tuple[str, nx.DiGraph]]:
+def build_dataset(
+    num_graphs: int,
+    n_values: List[int],
+    num_processors: int,
+) -> List[Tuple[str, nx.DiGraph]]:
     dataset = []
-    for i in range(num_graphs):
+
+    for _ in range(num_graphs):
         n = random.choice(n_values)
         kind = random.choice(["ER", "BA", "WS"])
+
         if kind == "ER":
-            dag = random_er_dag(n, p=random.uniform(0.05, 0.18), num_processors=num_processors)
+            dag = random_er_dag(
+                n,
+                p=random.uniform(0.05, 0.18),
+                num_processors=num_processors,
+            )
         elif kind == "BA":
-            dag = random_ba_dag(n, m=random.randint(1, min(4, n - 1)), num_processors=num_processors)
+            dag = random_ba_dag(
+                n,
+                m=random.randint(1, min(4, n - 1)),
+                num_processors=num_processors,
+            )
         else:
-            dag = random_ws_dag(n, k=min(4, n - 1), p=random.uniform(0.1, 0.4), num_processors=num_processors)
+            dag = random_ws_dag(
+                n,
+                k=min(4, n - 1),
+                p=random.uniform(0.1, 0.4),
+                num_processors=num_processors,
+            )
+
         dataset.append((kind, dag))
 
     dataset.extend([
@@ -161,12 +228,13 @@ def build_dataset(num_graphs: int, n_values: List[int], num_processors: int) -> 
         ("MOTIF_JOIN", motif_join(10, num_processors)),
         ("MOTIF_DIAMOND", motif_diamond(num_processors)),
     ])
+
     return dataset
 
 
-# -----------------------------
+# ============================================================
 # Feature extraction
-# -----------------------------
+# ============================================================
 
 FEATURE_NAMES = [
     "upward_rank",
@@ -190,7 +258,10 @@ def upward_rank(dag: nx.DiGraph) -> Dict[int, float]:
         if not succ:
             rank[v] = avg_cost(dag, v)
         else:
-            rank[v] = avg_cost(dag, v) + max(dag.edges[v, u]["comm"] + rank[u] for u in succ)
+            rank[v] = avg_cost(dag, v) + max(
+                dag.edges[v, u]["comm"] + rank[u]
+                for u in succ
+            )
     return rank
 
 
@@ -201,7 +272,10 @@ def downward_rank(dag: nx.DiGraph) -> Dict[int, float]:
         if not pred:
             rank[v] = avg_cost(dag, v)
         else:
-            rank[v] = avg_cost(dag, v) + max(dag.edges[u, v]["comm"] + rank[u] for u in pred)
+            rank[v] = avg_cost(dag, v) + max(
+                dag.edges[u, v]["comm"] + rank[u]
+                for u in pred
+            )
     return rank
 
 
@@ -218,6 +292,7 @@ def extract_node_features(dag: nx.DiGraph) -> Dict[int, Dict[str, float]]:
     dr = downward_rank(dag)
     dep = node_depths(dag)
     feats = {}
+
     for v in dag.nodes():
         out_comms = [dag.edges[v, u]["comm"] for u in dag.successors(v)]
         feats[v] = {
@@ -229,10 +304,13 @@ def extract_node_features(dag: nx.DiGraph) -> Dict[int, Dict[str, float]]:
             "avg_comm_out": float(np.mean(out_comms)) if out_comms else 0.0,
             "avg_cost": avg_cost(dag, v),
         }
+
     return feats
 
 
-def normalize_features(feats: Dict[int, Dict[str, float]]) -> Dict[int, Dict[str, float]]:
+def normalize_features(
+    feats: Dict[int, Dict[str, float]]
+) -> Dict[int, Dict[str, float]]:
     out = {v: {} for v in feats}
     for name in FEATURE_NAMES:
         vals = np.array([feats[v][name] for v in feats], dtype=float)
@@ -244,27 +322,46 @@ def normalize_features(feats: Dict[int, Dict[str, float]]) -> Dict[int, Dict[str
 
 def motif_counts(dag: nx.DiGraph) -> Dict[str, int]:
     counts = {
-        "chain_edges": 0,
+        "chain_nodes": 0,
         "fork_nodes": 0,
         "join_nodes": 0,
         "diamond_like_nodes": 0,
     }
+
     for v in dag.nodes():
-        indeg, outdeg = dag.in_degree(v), dag.out_degree(v)
+        indeg = dag.in_degree(v)
+        outdeg = dag.out_degree(v)
         if indeg == 1 and outdeg == 1:
-            counts["chain_edges"] += 1
+            counts["chain_nodes"] += 1
         if outdeg >= 2:
             counts["fork_nodes"] += 1
         if indeg >= 2:
             counts["join_nodes"] += 1
         if indeg >= 2 and outdeg >= 2:
             counts["diamond_like_nodes"] += 1
+
     return counts
 
 
-# -----------------------------
-# List scheduling
-# -----------------------------
+def graph_summary(dag: nx.DiGraph) -> Dict[str, Any]:
+    depths = node_depths(dag)
+    return {
+        "num_nodes": dag.number_of_nodes(),
+        "num_edges": dag.number_of_edges(),
+        "motifs": motif_counts(dag),
+        "max_depth": max(depths.values()) if depths else 0,
+        "avg_fanout": float(np.mean([dag.out_degree(v) for v in dag.nodes()])),
+        "avg_indegree": float(np.mean([dag.in_degree(v) for v in dag.nodes()])),
+        "avg_task_cost": float(np.mean([avg_cost(dag, v) for v in dag.nodes()])),
+        "avg_comm_cost": float(np.mean([dag.edges[e]["comm"] for e in dag.edges()]))
+        if dag.number_of_edges() > 0 else 0.0,
+        "feature_names": FEATURE_NAMES,
+    }
+
+
+# ============================================================
+# Schedule data structures
+# ============================================================
 
 @dataclass
 class ScheduleResult:
@@ -273,6 +370,10 @@ class ScheduleResult:
     start_times: Dict[int, float]
     finish_times: Dict[int, float]
 
+
+# ============================================================
+# List scheduling
+# ============================================================
 
 def earliest_start_finish(
     dag: nx.DiGraph,
@@ -283,9 +384,12 @@ def earliest_start_finish(
     assignment: Dict[int, int],
 ) -> Tuple[float, float]:
     ready_time = 0.0
+
     for parent in dag.predecessors(task):
-        comm = 0 if assignment.get(parent) == proc else dag.edges[parent, task]["comm"]
+        same_processor = assignment.get(parent) == proc
+        comm = 0 if same_processor else dag.edges[parent, task]["comm"]
         ready_time = max(ready_time, finish_times[parent] + comm)
+
     start = max(proc_available[proc], ready_time)
     finish = start + dag.nodes[task]["costs"][proc]
     return start, finish
@@ -298,24 +402,33 @@ def list_schedule(
 ) -> ScheduleResult:
     completed = set()
     scheduled = set()
-    assignment, start_times, finish_times = {}, {}, {}
+    assignment = {}
+    start_times = {}
+    finish_times = {}
     proc_available = [0.0] * num_processors
 
     while len(completed) < dag.number_of_nodes():
         ready = [
             v for v in dag.nodes()
-            if v not in scheduled and all(p in completed for p in dag.predecessors(v))
+            if v not in scheduled
+            and all(parent in completed for parent in dag.predecessors(v))
         ]
         if not ready:
-            raise RuntimeError("No ready tasks found. Is the graph a DAG?")
+            raise RuntimeError("No ready tasks found. Please check whether graph is a DAG.")
 
         task = max(ready, key=priority_fn)
+        best_proc = None
+        best_start = None
+        best_finish = float("inf")
 
-        best_proc, best_start, best_finish = None, None, float("inf")
         for p in range(num_processors):
-            s, f = earliest_start_finish(dag, task, p, proc_available, finish_times, assignment)
-            if f < best_finish:
-                best_proc, best_start, best_finish = p, s, f
+            start, finish = earliest_start_finish(
+                dag, task, p, proc_available, finish_times, assignment
+            )
+            if finish < best_finish:
+                best_proc = p
+                best_start = start
+                best_finish = finish
 
         assignment[task] = int(best_proc)
         start_times[task] = float(best_start)
@@ -324,7 +437,12 @@ def list_schedule(
         scheduled.add(task)
         completed.add(task)
 
-    return ScheduleResult(max(finish_times.values()), assignment, start_times, finish_times)
+    return ScheduleResult(
+        makespan=max(finish_times.values()),
+        assignment=assignment,
+        start_times=start_times,
+        finish_times=finish_times,
+    )
 
 
 def schedule_with_priority_order(
@@ -332,24 +450,35 @@ def schedule_with_priority_order(
     num_processors: int,
     priority_order_policy,
 ) -> ScheduleResult:
-    """Used by RL policy, which selects from ready tasks dynamically."""
     completed = set()
     scheduled = set()
-    assignment, start_times, finish_times = {}, {}, {}
+    assignment = {}
+    start_times = {}
+    finish_times = {}
     proc_available = [0.0] * num_processors
 
     while len(completed) < dag.number_of_nodes():
         ready = [
             v for v in dag.nodes()
-            if v not in scheduled and all(p in completed for p in dag.predecessors(v))
+            if v not in scheduled
+            and all(parent in completed for parent in dag.predecessors(v))
         ]
-        task = priority_order_policy(ready, completed)
+        if not ready:
+            raise RuntimeError("No ready tasks found. Please check whether graph is a DAG.")
 
-        best_proc, best_start, best_finish = None, None, float("inf")
+        task = priority_order_policy(ready, completed)
+        best_proc = None
+        best_start = None
+        best_finish = float("inf")
+
         for p in range(num_processors):
-            s, f = earliest_start_finish(dag, task, p, proc_available, finish_times, assignment)
-            if f < best_finish:
-                best_proc, best_start, best_finish = p, s, f
+            start, finish = earliest_start_finish(
+                dag, task, p, proc_available, finish_times, assignment
+            )
+            if finish < best_finish:
+                best_proc = p
+                best_start = start
+                best_finish = finish
 
         assignment[task] = int(best_proc)
         start_times[task] = float(best_start)
@@ -358,24 +487,31 @@ def schedule_with_priority_order(
         scheduled.add(task)
         completed.add(task)
 
-    return ScheduleResult(max(finish_times.values()), assignment, start_times, finish_times)
+    return ScheduleResult(
+        makespan=max(finish_times.values()),
+        assignment=assignment,
+        start_times=start_times,
+        finish_times=finish_times,
+    )
 
 
 def critical_path_fastest_processor(dag: nx.DiGraph) -> float:
     fastest = {v: min(dag.nodes[v]["costs"]) for v in dag.nodes()}
     dist = {}
+
     for v in nx.topological_sort(dag):
         preds = list(dag.predecessors(v))
         if not preds:
             dist[v] = fastest[v]
         else:
             dist[v] = fastest[v] + max(dist[p] for p in preds)
+
     return max(dist.values()) if dist else 0.0
 
 
-# -----------------------------
-# Baseline priority functions
-# -----------------------------
+# ============================================================
+# Baselines and weighted priority heuristic
+# ============================================================
 
 def heft_schedule(dag: nx.DiGraph, num_processors: int) -> ScheduleResult:
     ur = upward_rank(dag)
@@ -401,36 +537,27 @@ def weighted_feature_schedule(
     )
 
 
+# ============================================================
+# Bayesian Optimization for LLM weights
+# ============================================================
+
 def bayes_optimize_llm_weights(
-    train_data,
-    num_processors,
-    initial_weights,
-    n_calls=30,
-):
-    """
-    Bayesian Optimization improves the LLM-generated feature weights.
+    train_data: List[Tuple[str, nx.DiGraph]],
+    num_processors: int,
+    initial_weights: Dict[str, float],
+    n_calls: int = 30,
+    seed: int = 7,
+) -> Dict[str, float]:
+    if gp_minimize is None:
+        print("[WARN] scikit-optimize not installed. Using raw LLM weights.")
+        return initial_weights
 
-    Input:
-        initial_weights = weights proposed by LLM
-
-    Output:
-        optimized_weights = BO-refined weights
-    """
-
-    search_space = [
-        Real(-2.0, 2.0, name=name)
-        for name in FEATURE_NAMES
-    ]
-
-    initial_point = [
-        initial_weights.get(name, 0.0)
-        for name in FEATURE_NAMES
-    ]
+    search_space = [Real(-2.0, 2.0, name=name) for name in FEATURE_NAMES]
+    initial_point = [float(initial_weights.get(name, 0.0)) for name in FEATURE_NAMES]
 
     @use_named_args(search_space)
     def objective(**weights):
         total_makespan = 0.0
-
         for _, dag in train_data:
             result = weighted_feature_schedule(
                 dag=dag,
@@ -438,17 +565,14 @@ def bayes_optimize_llm_weights(
                 weights=weights,
             )
             total_makespan += result.makespan
-
-        avg_makespan = total_makespan / len(train_data)
-
-        return avg_makespan
+        return total_makespan / len(train_data)
 
     result = gp_minimize(
         func=objective,
         dimensions=search_space,
         x0=initial_point,
         n_calls=n_calls,
-        random_state=7,
+        random_state=seed,
         acq_func="EI",
     )
 
@@ -461,19 +585,14 @@ def bayes_optimize_llm_weights(
     print(f"Best training makespan: {result.fun:.2f}")
     print("BO-optimized weights:")
     print(json.dumps(optimized_weights, indent=2))
-
     return optimized_weights
 
-# -----------------------------
-# LLM feature-weight proposal
-# -----------------------------
+
+# ============================================================
+# LLM Role 1: propose priority weights
+# ============================================================
 
 def llm_propose_weights(dag: nx.DiGraph, model: str = "gpt-4o-mini") -> Dict[str, float]:
-    """
-    Optional LLM call. Requires:
-        pip install openai
-        export OPENAI_API_KEY=...
-    """
     fallback = {
         "upward_rank": 1.0,
         "downward_rank": 0.25,
@@ -485,26 +604,26 @@ def llm_propose_weights(dag: nx.DiGraph, model: str = "gpt-4o-mini") -> Dict[str
     }
 
     if OpenAI is None or not os.getenv("OPENAI_API_KEY"):
+        print("[LLM fallback] OPENAI_API_KEY missing or openai package unavailable.")
         return fallback
 
-    stats = {
-        "num_nodes": dag.number_of_nodes(),
-        "num_edges": dag.number_of_edges(),
-        "motifs": motif_counts(dag),
-        "feature_names": FEATURE_NAMES,
-        "instruction": "Return JSON only: feature weights for a list-scheduling priority function.",
-        "template": "H(v)=sum_i theta_i*f_i(v). Higher score means schedule earlier.",
-    }
+    stats = graph_summary(dag)
+    stats["instruction"] = "Return JSON only: feature weights for a list-scheduling priority function."
+    stats["template"] = "H(v)=sum_i theta_i*f_i(v). Higher score means schedule earlier."
 
     prompt = f"""
 You are helping design an interpretable DAG scheduling heuristic for HLS/list scheduling.
-Given this DAG summary, propose numeric weights for the listed normalized features.
+
+Given the DAG summary, propose numeric weights for normalized structural features.
 
 Rules:
 - Return JSON only.
-- Keys must be exactly the feature names.
-- Values should be floats between -2 and 2.
-- Prioritize critical path, communication pressure, and motif structure.
+- Keys must be exactly these feature names:
+  {FEATURE_NAMES}
+- Values must be floats between -2 and 2.
+- Favor critical-path operations, communication-heavy operations, and useful parallelism.
+- Penalize features only when early scheduling of that feature may cause synchronization or resource contention.
+- Do not produce explanation. Return only JSON.
 
 DAG summary:
 {json.dumps(stats, indent=2)}
@@ -526,36 +645,130 @@ DAG summary:
         return fallback
 
 
-def llm_schedule_insights(
-    dag: nx.DiGraph,
-    schedule_result: ScheduleResult,
-    method_name: str,
-    model: str = "gpt-4o-mini",
-) -> str:
-    """
-    Second LLM role:
-    Analyze the generated schedule and suggest PPA-aware optimization actions.
+# ============================================================
+# Schedule analysis helpers for LLM Role 2
+# ============================================================
 
-    Requires:
-        export OPENAI_API_KEY=...
-        pip install openai
-    """
+def processor_intervals(schedule: ScheduleResult) -> Dict[int, List[Dict[str, float]]]:
+    intervals: Dict[int, List[Dict[str, float]]] = {}
+    for task, proc in schedule.assignment.items():
+        intervals.setdefault(proc, []).append({
+            "task": int(task),
+            "start": float(schedule.start_times[task]),
+            "finish": float(schedule.finish_times[task]),
+            "duration": float(schedule.finish_times[task] - schedule.start_times[task]),
+        })
+    for proc in intervals:
+        intervals[proc] = sorted(intervals[proc], key=lambda x: x["start"])
+    return intervals
 
-    if OpenAI is None or not os.getenv("OPENAI_API_KEY"):
-        return "[LLM insights skipped] OPENAI_API_KEY not found."
 
+def find_critical_path(dag: nx.DiGraph) -> List[int]:
+    """Approximate critical path using average task cost and communication cost."""
+    dist = {}
+    parent = {}
+
+    for v in nx.topological_sort(dag):
+        preds = list(dag.predecessors(v))
+        if not preds:
+            dist[v] = avg_cost(dag, v)
+            parent[v] = None
+        else:
+            best_pred = max(preds, key=lambda p: dist[p] + dag.edges[p, v]["comm"])
+            dist[v] = dist[best_pred] + dag.edges[best_pred, v]["comm"] + avg_cost(dag, v)
+            parent[v] = best_pred
+
+    if not dist:
+        return []
+
+    end = max(dist, key=dist.get)
+    path = []
+    while end is not None:
+        path.append(end)
+        end = parent[end]
+    return list(reversed(path))
+
+
+def detect_independent_parallel_groups(dag: nx.DiGraph, limit: int = 5) -> List[List[int]]:
+    levels: Dict[int, List[int]] = {}
+    depths = node_depths(dag)
+    for v, d in depths.items():
+        levels.setdefault(d, []).append(v)
+
+    groups = []
+    for _, nodes in sorted(levels.items()):
+        group = []
+        for v in nodes:
+            independent = True
+            for u in group:
+                if nx.has_path(dag, u, v) or nx.has_path(dag, v, u):
+                    independent = False
+                    break
+            if independent:
+                group.append(v)
+        if len(group) >= 2:
+            groups.append([int(x) for x in group[:8]])
+        if len(groups) >= limit:
+            break
+    return groups
+
+
+def candidate_pipeline_edges(dag: nx.DiGraph, schedule: ScheduleResult, limit: int = 10) -> List[Dict[str, Any]]:
+    cp = set(find_critical_path(dag))
+    candidates = []
+    for u, v in dag.edges():
+        producer_finish = schedule.finish_times[u]
+        consumer_start = schedule.start_times[v]
+        gap = max(0.0, consumer_start - producer_finish)
+        comm = dag.edges[u, v]["comm"]
+        score = gap + comm
+        if u in cp and v in cp:
+            score += 10.0
+        candidates.append({
+            "edge": [int(u), int(v)],
+            "producer_finish": float(producer_finish),
+            "consumer_start": float(consumer_start),
+            "schedule_gap": float(gap),
+            "communication_cost": float(comm),
+            "on_critical_path": bool(u in cp and v in cp),
+            "reason": "possible register/FIFO/buffer boundary; useful only if timing, buffering, or throughput constraints justify it",
+            "score": float(score),
+        })
+    candidates.sort(key=lambda x: x["score"], reverse=True)
+    for c in candidates:
+        c.pop("score", None)
+    return candidates[:limit]
+
+
+def resource_contention_summary(dag: nx.DiGraph, schedule: ScheduleResult, num_processors: int) -> Dict[str, Any]:
+    intervals = processor_intervals(schedule)
+    busy_time = {}
+    for p in range(num_processors):
+        busy_time[p] = sum(item["duration"] for item in intervals.get(p, []))
+
+    makespan = max(schedule.finish_times.values()) if schedule.finish_times else 0.0
+    utilization = {p: (busy_time[p] / makespan if makespan > 0 else 0.0) for p in range(num_processors)}
+    sorted_util = sorted(utilization.items(), key=lambda x: x[1], reverse=True)
+
+    return {
+        "processor_busy_time": {int(k): float(v) for k, v in busy_time.items()},
+        "processor_utilization": {int(k): float(v) for k, v in utilization.items()},
+        "most_loaded_processors": [{"processor": int(p), "utilization": float(u)} for p, u in sorted_util[:3]],
+        "least_loaded_processors": [{"processor": int(p), "utilization": float(u)} for p, u in sorted_util[-3:]],
+    }
+
+
+def build_schedule_insight_payload(dag: nx.DiGraph, schedule_result: ScheduleResult, method_name: str, num_processors: int) -> Dict[str, Any]:
     feats = extract_node_features(dag)
-    motifs = motif_counts(dag)
+    cp = find_critical_path(dag)
+    cp_set = set(cp)
 
-    finish_times = schedule_result.finish_times
-    start_times = schedule_result.start_times
-    assignment = schedule_result.assignment
-
-    # Find top bottleneck operations
     sorted_nodes = sorted(
         dag.nodes(),
         key=lambda v: (
+            1 if v in cp_set else 0,
             feats[v]["upward_rank"],
+            schedule_result.finish_times[v] - schedule_result.start_times[v],
             dag.out_degree(v),
             feats[v]["avg_comm_out"],
         ),
@@ -563,53 +776,167 @@ def llm_schedule_insights(
     )
 
     bottlenecks = []
-    for v in sorted_nodes[:8]:
+    for v in sorted_nodes[:10]:
         bottlenecks.append({
             "op_id": int(v),
-            "processor": int(assignment[v]),
-            "start": float(start_times[v]),
-            "finish": float(finish_times[v]),
-            "duration": float(finish_times[v] - start_times[v]),
+            "processor": int(schedule_result.assignment[v]),
+            "start": float(schedule_result.start_times[v]),
+            "finish": float(schedule_result.finish_times[v]),
+            "duration": float(schedule_result.finish_times[v] - schedule_result.start_times[v]),
+            "on_critical_path": bool(v in cp_set),
             "upward_rank": float(feats[v]["upward_rank"]),
+            "downward_rank": float(feats[v]["downward_rank"]),
             "depth": float(feats[v]["depth"]),
             "fanout": int(dag.out_degree(v)),
             "indegree": int(dag.in_degree(v)),
             "avg_comm_out": float(feats[v]["avg_comm_out"]),
+            "successors": [int(s) for s in dag.successors(v)],
+            "predecessors": [int(p) for p in dag.predecessors(v)],
         })
 
-    summary = {
+    return {
         "method": method_name,
-        "num_nodes": dag.number_of_nodes(),
-        "num_edges": dag.number_of_edges(),
-        "makespan": schedule_result.makespan,
-        "motif_counts": motifs,
+        "graph_summary": graph_summary(dag),
+        "makespan": float(schedule_result.makespan),
+        "critical_path_nodes": [int(v) for v in cp],
         "bottleneck_operations": bottlenecks,
-        "goal": "Suggest scheduling and HLS-level changes that may improve latency, area, power, and resource reuse.",
+        "independent_parallel_groups": detect_independent_parallel_groups(dag),
+        "candidate_register_or_memory_edges": candidate_pipeline_edges(dag, schedule_result),
+        "resource_contention_summary": resource_contention_summary(dag, schedule_result, num_processors),
+        "processor_schedule_intervals": processor_intervals(schedule_result),
+        "interpretation_note": (
+            "All suggested parallelism must respect DAG dependencies. "
+            "Register/FIFO/memory insertion suggestions should refer to candidate edges or dependency boundaries listed above. "
+            "The DAG abstraction does not include operation type, RTL internals, timing slack, memory banking, or DSP/ALU type, "
+            "so any internal pipelining, operation splitting, or resource-specific recommendation must be stated as a hypothesis."
+        ),
     }
 
+
+# ============================================================
+# LLM Role 2: schedule insights and PPA recommendations
+# ============================================================
+
+def llm_schedule_insights(
+    dag: nx.DiGraph,
+    schedule_result: ScheduleResult,
+    method_name: str,
+    num_processors: int,
+    model: str = "gpt-4o-mini",
+) -> str:
+    if OpenAI is None or not os.getenv("OPENAI_API_KEY"):
+        return "[LLM insights skipped] OPENAI_API_KEY not found or openai package unavailable."
+
+    payload = build_schedule_insight_payload(
+        dag=dag,
+        schedule_result=schedule_result,
+        method_name=method_name,
+        num_processors=num_processors,
+    )
+
     prompt = f"""
-You are an expert in high-level synthesis, DAG scheduling, and PPA optimization.
+You are an expert in high-level synthesis (HLS), DAG scheduling, FPGA/ASIC optimization, and PPA-aware hardware design.
 
-Analyze this scheduled DAG and give practical optimization insights.
+Analyze the scheduled DAG and provide practical scheduling and hardware optimization insights.
 
-Focus on:
-1. Which operations are bottlenecks and why.
-2. Whether to increase parallelism or reduce parallelism.
-3. Whether resource reuse is beneficial.
-4. Whether pipelining would help.
-5. Whether high-fanout or communication-heavy nodes should be optimized.
-6. Possible PPA tradeoffs: latency, area, power.
-7. Give concise actionable recommendations.
+Your answer must focus on the following requested logic:
 
-Return the answer in this structure:
+TOP SECTION: Heuristics -> Bottlenecks
+Identify the operations that hurt the schedule the most.
+Use these bottleneck categories:
+- long-latency operations
+- operations that cause schedule variation by blocking otherwise independent operations
+- operations that belong to the critical path
+- operations affected by resource availability or resource contention
+- high-fanout or communication-heavy operations
+- dependency-induced serialization points
 
-A. Bottleneck Summary
-B. Scheduling Insight
-C. PPA Optimization Recommendation
-D. Next Action for HLS Designer
+MIDDLE SECTION: Parallelism and Scheduling
+Explain how to improve parallelism.
+Discuss:
+- which independent operations can execute simultaneously
+- which operations are unnecessarily serialized
+- whether adding new resources can improve parallelism
+- which bottlenecks justify adding new resources
+- whether resource reuse is helping area/power or hurting latency
+- how rescheduling can better overlap independent operations
 
-Schedule data:
-{json.dumps(summary, indent=2)}
+PIPELINING SECTION:
+Explain how rescheduling can be improved by adding memory elements.
+Discuss:
+- where registers, FIFOs, buffers, or memory elements should be introduced
+- which producer-consumer edges are good candidates for pipeline/register insertion
+- how pipelining may improve clock frequency, throughput, and stage balance without violating producer-consumer dependencies
+- whether pipeline stages should split long operations or critical dependency chains
+
+BOTTOM QUESTION:
+Explicitly answer this question:
+"Where do you introduce the register/memory to achieve pipelining/scheduling?"
+
+PPA SECTION:
+Give PPA-aware recommendations:
+- latency reduction
+- area optimization
+- power reduction
+- throughput improvement
+- tradeoff between adding resources and reusing resources
+
+Return the answer exactly in this structure:
+
+A. Heuristic and Bottleneck Analysis
+- Major bottleneck operations:
+- Why they are bottlenecks:
+- Critical-path operations:
+- Resource availability issues:
+- Dependency-induced serialization:
+
+B. Parallelism and Scheduling Opportunities
+- Independent operations that can run in parallel:
+- Operations that should be rescheduled:
+- Resources that should be added to increase parallelism:
+- Cases where resource reuse is good:
+- Cases where resource reuse hurts latency:
+
+C. Pipelining and Register/Memory Insertion Guidance
+- Best locations to insert registers/FIFOs/buffers/memory:
+- Candidate dependency edges for pipelining:
+- Suggested pipeline stages:
+- How pipelining improves scheduling:
+
+D. Direct Answer: Where to Introduce Register/Memory?
+- Give a clear edge-level or boundary-level answer using operation IDs.
+- Mention why that location helps.
+
+E. PPA Optimization Recommendations
+- Latency:
+- Area:
+- Power:
+- Throughput:
+- Tradeoff summary:
+
+F. Next Actions for the HLS Designer
+- Concrete next steps:
+- Scheduling changes:
+- Hardware/resource changes:
+- What to verify after changes:
+
+Important constraints:
+- Do NOT suggest impossible parallelism that violates DAG precedence constraints.
+- Use the provided independent_parallel_groups when discussing parallelism.
+- Use the provided candidate_register_or_memory_edges when discussing register/FIFO/memory insertion.
+- Do NOT claim that registers/memory allow a dependent consumer operation to start before its producer data is available.
+- Explain that registers/FIFOs/buffers mainly help by breaking long combinational paths, improving timing closure, balancing pipeline stages, and improving throughput.
+- Register insertion may improve clock frequency and throughput, but it may not always reduce single-instance DAG latency.
+- Avoid recommending registers on every incoming edge of a join node. Prefer only critical-path, high-communication, high-gap, or high-delay candidate edges.
+- If suggesting internal pipelining or splitting a long operation, explicitly state: "This assumes the operation can be decomposed or internally pipelined; the DAG alone does not prove this."
+- If a pipelining or decomposition suggestion depends on operation internals that are not visible in the DAG abstraction, explicitly state the assumption.
+- If operation type, RTL structure, memory banking, DSP/ALU type, or timing slack is unknown, say the recommendation is a hypothesis.
+- Focus on scheduling-aware hardware optimization, not generic advice.
+- Never say that register insertion allows a dependent consumer node to start earlier unless retiming, buffering, or protocol-level decoupling is explicitly modeled. For normal DAG scheduling, the consumer must still wait for producer data.
+- Keep the answer concise but technically meaningful.
+
+Scheduled DAG data:
+{json.dumps(payload, indent=2)}
 """
 
     client = OpenAI()
@@ -618,21 +945,19 @@ Schedule data:
         temperature=0,
         messages=[{"role": "user", "content": prompt}],
     )
-
     return resp.choices[0].message.content.strip()
 
 
-# -----------------------------
+# ============================================================
 # GNN models
-# -----------------------------
+# ============================================================
 
 class TinyDAGGNN(nn.Module):
     """
     Small message-passing GNN over DAG edges.
-    It creates node scores. We use the same architecture for:
-    - Decima-like RL policy
-    - Supervised GNN policy
+    Used for GNN imitation and Decima-like RL.
     """
+
     def __init__(self, in_dim: int, hidden_dim: int = 64):
         super().__init__()
         self.input = nn.Linear(in_dim, hidden_dim)
@@ -646,8 +971,6 @@ class TinyDAGGNN(nn.Module):
 
     def forward(self, x: "torch.Tensor", edge_index: "torch.Tensor") -> "torch.Tensor":
         h = torch.relu(self.input(x))
-        n = h.shape[0]
-
         for _ in range(3):
             agg = torch.zeros_like(h)
             if edge_index.numel() > 0:
@@ -655,7 +978,6 @@ class TinyDAGGNN(nn.Module):
                 messages = self.msg(h[src])
                 agg.index_add_(0, dst, messages)
             h = self.update(agg, h)
-
         return self.out(h).squeeze(-1)
 
 
@@ -663,12 +985,18 @@ def graph_to_tensors(dag: nx.DiGraph):
     feats = normalize_features(extract_node_features(dag))
     nodes = list(dag.nodes())
     node_to_idx = {v: i for i, v in enumerate(nodes)}
-    x = torch.tensor([[feats[v][name] for name in FEATURE_NAMES] for v in nodes], dtype=torch.float32)
+
+    x = torch.tensor(
+        [[feats[v][name] for name in FEATURE_NAMES] for v in nodes],
+        dtype=torch.float32,
+    )
+
     edges = [(node_to_idx[u], node_to_idx[v]) for u, v in dag.edges()]
     if edges:
         edge_index = torch.tensor(edges, dtype=torch.long).t().contiguous()
     else:
         edge_index = torch.empty((2, 0), dtype=torch.long)
+
     return nodes, node_to_idx, x, edge_index
 
 
@@ -687,6 +1015,7 @@ def train_gnn_imitation(
     for epoch in range(epochs):
         total_loss = 0.0
         random.shuffle(train_data)
+
         for _, dag in train_data:
             nodes, _, x, edge_index = graph_to_tensors(dag)
             scores = model(x, edge_index)
@@ -698,8 +1027,9 @@ def train_gnn_imitation(
             loss.backward()
             opt.step()
             total_loss += float(loss.item())
+
         if (epoch + 1) % max(1, epochs // 5) == 0:
-            print(f"[GNN imitation] epoch={epoch+1:03d}, loss={total_loss/len(train_data):.4f}")
+            print(f"[GNN imitation] epoch={epoch + 1:03d}, loss={total_loss / len(train_data):.4f}")
 
     return model
 
@@ -729,7 +1059,6 @@ def train_decima_like_rl(
     for ep in range(episodes):
         _, dag = random.choice(train_data)
         nodes, node_to_idx, x, edge_index = graph_to_tensors(dag)
-
         log_probs = []
 
         def policy(ready: List[int], completed: set) -> int:
@@ -744,10 +1073,8 @@ def train_decima_like_rl(
 
         result = schedule_with_priority_order(dag, num_processors, policy)
         reward = -result.makespan
-
         baseline = reward if baseline is None else 0.9 * baseline + 0.1 * reward
         advantage = reward - baseline
-
         loss = -torch.stack(log_probs).sum() * float(advantage)
         opt.zero_grad()
         loss.backward()
@@ -755,25 +1082,27 @@ def train_decima_like_rl(
         opt.step()
 
         if (ep + 1) % max(1, episodes // 5) == 0:
-            print(f"[Decima-like RL] episode={ep+1:03d}, makespan={result.makespan:.2f}, reward={reward:.2f}")
+            print(f"[Decima-like RL] episode={ep + 1:03d}, makespan={result.makespan:.2f}, reward={reward:.2f}")
 
     return model
 
 
-# -----------------------------
+# ============================================================
 # Evaluation
-# -----------------------------
+# ============================================================
 
 def evaluate_method(
     name: str,
     data: List[Tuple[str, nx.DiGraph]],
     num_processors: int,
     schedule_fn,
-) -> List[Dict[str, Any]]:
+) -> Tuple[List[Dict[str, Any]], List[Tuple[str, nx.DiGraph, ScheduleResult]]]:
     rows = []
+    schedules = []
+
     for family, dag in data:
         t0 = time.time()
-        res = schedule_fn(dag)
+        result = schedule_fn(dag)
         runtime = time.time() - t0
         cp = critical_path_fastest_processor(dag)
         rows.append({
@@ -781,57 +1110,64 @@ def evaluate_method(
             "family": family,
             "nodes": dag.number_of_nodes(),
             "edges": dag.number_of_edges(),
-            "makespan": res.makespan,
-            "slr": res.makespan / cp if cp > 0 else float("nan"),
+            "makespan": result.makespan,
+            "slr": result.makespan / cp if cp > 0 else float("nan"),
             "runtime_ms": runtime * 1000,
             "motifs": motif_counts(dag),
         })
-    return rows
+        schedules.append((family, dag, result))
+
+    return rows, schedules
 
 
 def summarize(rows: List[Dict[str, Any]]) -> None:
     by_method = {}
-    for r in rows:
-        by_method.setdefault(r["method"], []).append(r)
+    for row in rows:
+        by_method.setdefault(row["method"], []).append(row)
 
     print("\n=== Aggregate Results ===")
-    print(f"{'Method':<18} {'Avg Makespan':>14} {'Avg SLR':>10} {'Runtime ms':>12}")
+    print(f"{'Method':<20} {'Avg Makespan':>14} {'Avg SLR':>10} {'Runtime ms':>12}")
+
     for method, rs in by_method.items():
         print(
-            f"{method:<18} "
+            f"{method:<20} "
             f"{np.mean([r['makespan'] for r in rs]):>14.2f} "
             f"{np.mean([r['slr'] for r in rs]):>10.3f} "
             f"{np.mean([r['runtime_ms'] for r in rs]):>12.3f}"
         )
 
-    methods = list(by_method.keys())
     if "HEFT" in by_method:
         heft = by_method["HEFT"]
         print("\n=== Win Count vs HEFT ===")
-        for method in methods:
+        for method, rs in by_method.items():
             if method == "HEFT":
                 continue
-            wins = sum(r["makespan"] < h["makespan"] for r, h in zip(by_method[method], heft))
-            ties = sum(abs(r["makespan"] - h["makespan"]) < 1e-9 for r, h in zip(by_method[method], heft))
-            print(f"{method:<18} wins={wins:>3}, ties={ties:>3}, total={len(heft)}")
+            wins = sum(r["makespan"] < h["makespan"] for r, h in zip(rs, heft))
+            ties = sum(abs(r["makespan"] - h["makespan"]) < 1e-9 for r, h in zip(rs, heft))
+            print(f"{method:<20} wins={wins:>3}, ties={ties:>3}, total={len(heft)}")
 
     print("\n=== Example Per-DAG Rows ===")
-    for r in rows[:min(12, len(rows))]:
+    for row in rows[:min(12, len(rows))]:
         print(
-            f"{r['method']:<18} family={r['family']:<12} "
-            f"nodes={r['nodes']:<3} edges={r['edges']:<3} "
-            f"makespan={r['makespan']:<8.2f} slr={r['slr']:.3f}"
+            f"{row['method']:<20} "
+            f"family={row['family']:<12} "
+            f"nodes={row['nodes']:<3} "
+            f"edges={row['edges']:<3} "
+            f"makespan={row['makespan']:<8.2f} "
+            f"slr={row['slr']:.3f}"
         )
 
 
 def save_csv(rows: List[Dict[str, Any]], path: str) -> None:
     import csv
+    if not rows:
+        print("[WARN] No rows to save.")
+        return
     flat_rows = []
-    for r in rows:
-        rr = dict(r)
-        rr["motifs"] = json.dumps(rr["motifs"])
-        flat_rows.append(rr)
-
+    for row in rows:
+        flat = dict(row)
+        flat["motifs"] = json.dumps(flat["motifs"])
+        flat_rows.append(flat)
     with open(path, "w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=list(flat_rows[0].keys()))
         writer.writeheader()
@@ -839,22 +1175,30 @@ def save_csv(rows: List[Dict[str, Any]], path: str) -> None:
     print(f"\nSaved detailed results to: {path}")
 
 
-# -----------------------------
+# ============================================================
 # Main
-# -----------------------------
+# ============================================================
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--seed", type=int, default=7)
     parser.add_argument("--num-processors", type=int, default=4)
     parser.add_argument("--num-graphs", type=int, default=36)
     parser.add_argument("--train-episodes", type=int, default=80)
     parser.add_argument("--gnn-epochs", type=int, default=80)
+    parser.add_argument("--bo-calls", type=int, default=30)
     parser.add_argument("--use-llm", action="store_true")
     parser.add_argument("--openai-model", type=str, default="gpt-4o-mini")
     parser.add_argument("--out", type=str, default="sample_scheduler_results.csv")
-    args = parser.parse_args()
+    parser.add_argument(
+        "--insight-method",
+        type=str,
+        default="LLM+BO-Heuristic",
+        choices=["HEFT", "CPOP", "LLM-Heuristic", "LLM+BO-Heuristic", "GNN-Imitation", "Decima-like-RL"],
+        help="Which method schedule should be sent to the LLM insight module.",
+    )
 
+    args = parser.parse_args()
     set_seed(args.seed)
 
     dataset = build_dataset(
@@ -863,6 +1207,7 @@ def main():
         num_processors=args.num_processors,
     )
     random.shuffle(dataset)
+
     split = int(0.7 * len(dataset))
     train_data = dataset[:split]
     test_data = dataset[split:]
@@ -870,19 +1215,11 @@ def main():
     print(f"Train DAGs: {len(train_data)}, Test DAGs: {len(test_data)}")
     print(f"Processors: {args.num_processors}")
 
-    # LLM proposed heuristic weights: one call using first test DAG.
-    # llm_weights = None
-    # if args.use_llm:
-    #     llm_weights = llm_propose_weights(test_data[0][1], model=args.openai_model)
-    #     print("\nLLM proposed weights:")
-    #     print(json.dumps(llm_weights, indent=2))
-
     llm_weights = None
     bo_weights = None
 
     if args.use_llm:
         llm_weights = llm_propose_weights(test_data[0][1], model=args.openai_model)
-
         print("\nLLM proposed weights:")
         print(json.dumps(llm_weights, indent=2))
 
@@ -890,62 +1227,61 @@ def main():
             train_data=train_data,
             num_processors=args.num_processors,
             initial_weights=llm_weights,
-            n_calls=30,
-      )
+            n_calls=args.bo_calls,
+            seed=args.seed,
+        )
 
-    # Train learned methods.
     gnn_model = train_gnn_imitation(train_data, epochs=args.gnn_epochs)
     rl_model = train_decima_like_rl(train_data, args.num_processors, episodes=args.train_episodes)
 
-    all_rows = []
+    all_rows: List[Dict[str, Any]] = []
+    schedules_by_method: Dict[str, List[Tuple[str, nx.DiGraph, ScheduleResult]]] = {}
 
-    all_rows += evaluate_method(
-        "HEFT",
-        test_data,
-        args.num_processors,
+    rows, schedules = evaluate_method(
+        "HEFT", test_data, args.num_processors,
         lambda dag: heft_schedule(dag, args.num_processors),
     )
+    all_rows += rows
+    schedules_by_method["HEFT"] = schedules
 
-    all_rows += evaluate_method(
-        "CPOP",
-        test_data,
-        args.num_processors,
+    rows, schedules = evaluate_method(
+        "CPOP", test_data, args.num_processors,
         lambda dag: cpop_schedule(dag, args.num_processors),
     )
+    all_rows += rows
+    schedules_by_method["CPOP"] = schedules
 
     if llm_weights is not None:
-        all_rows += evaluate_method(
-            "LLM-Heuristic",
-            test_data,
-            args.num_processors,
+        rows, schedules = evaluate_method(
+            "LLM-Heuristic", test_data, args.num_processors,
             lambda dag: weighted_feature_schedule(dag, args.num_processors, llm_weights),
         )
+        all_rows += rows
+        schedules_by_method["LLM-Heuristic"] = schedules
+
     if bo_weights is not None:
-        all_rows += evaluate_method(
-            "LLM+BO-Heuristic",
-            test_data,
-            args.num_processors,
+        rows, schedules = evaluate_method(
+            "LLM+BO-Heuristic", test_data, args.num_processors,
             lambda dag: weighted_feature_schedule(dag, args.num_processors, bo_weights),
-    )
+        )
+        all_rows += rows
+        schedules_by_method["LLM+BO-Heuristic"] = schedules
 
     if gnn_model is not None:
-        all_rows += evaluate_method(
-            "GNN-Imitation",
-            test_data,
-            args.num_processors,
+        rows, schedules = evaluate_method(
+            "GNN-Imitation", test_data, args.num_processors,
             lambda dag: gnn_schedule(gnn_model, dag, args.num_processors),
         )
+        all_rows += rows
+        schedules_by_method["GNN-Imitation"] = schedules
 
     if rl_model is not None:
-        all_rows += evaluate_method(
-            "Decima-like-RL",
-            test_data,
-            args.num_processors,
+        rows, schedules = evaluate_method(
+            "Decima-like-RL", test_data, args.num_processors,
             lambda dag: gnn_schedule(rl_model, dag, args.num_processors),
         )
-
-    #summarize(all_rows)
-    #save_csv(all_rows, args.out)
+        all_rows += rows
+        schedules_by_method["Decima-like-RL"] = schedules
 
     summarize(all_rows)
     save_csv(all_rows, args.out)
@@ -955,17 +1291,19 @@ def main():
 
         family, example_dag = test_data[0]
 
-    # Using HEFT schedule as example, but can be change to LLM-Heuristic or GNN.
+    # Use HEFT schedule as example, but you can change this to LLM-Heuristic or GNN.
         example_schedule = heft_schedule(example_dag, args.num_processors)
 
         insights = llm_schedule_insights(
             dag=example_dag,
             schedule_result=example_schedule,
-            method_name="HEFT",
+            method_name=insight_method,
+            num_processors=args.num_processors,
             model=args.openai_model,
         )
 
         print(f"\nDAG family: {family}")
+        print(f"Insight method: {insight_method}")
         print(insights)
 
 
