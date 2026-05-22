@@ -6,37 +6,49 @@ A. Heuristic and Bottleneck Analysis
 - Major bottleneck operations:
   - Operation 6 (duration: 33.0, on critical path)
   - Operation 10 (duration: 17.0, on critical path)
+
 - Why they are bottlenecks:
   - Operation 6 is a long-latency operation that significantly contributes to the overall makespan. Its duration of 33.0 units is the longest in the DAG, making it a critical path operation.
   - Operation 10, while shorter, is dependent on multiple predecessors, which can lead to delays if any of those operations are not completed on time.
+
 - Critical-path operations:
   - Operations 6 and 10 are on the critical path, directly affecting the overall schedule and makespan.
+
 - Resource availability issues:
   - Processor 2 is fully utilized (1.0 utilization), which may lead to contention and delays for operations assigned to it, particularly for operations 6 and 10.
+
 - Dependency-induced serialization:
   - Operations 0, 1, 2, 3, 4, 5, 6, 7 must complete before operation 10 can start, creating a bottleneck due to the high number of dependencies.
 
 B. Parallelism and Scheduling Opportunities
 - Independent operations that can run in parallel:
   - Operations 0, 1, 2, 3, 4, 5, 6, and 7 can execute simultaneously as they do not depend on each other.
+
 - Operations that should be rescheduled:
   - Operations 6 and 10 should be analyzed for potential rescheduling to reduce the impact of their long durations on the overall schedule.
+
 - Resources that should be added to increase parallelism:
   - Additional resources (e.g., another processor) could help alleviate the contention on processor 2, allowing operations 6 and 10 to be processed more efficiently.
+
 - Cases where resource reuse is good:
   - Reusing resources for operations that are not on the critical path (e.g., operations 1, 2, 3, 4, 5) can help optimize area and power without significantly impacting latency.
+
 - Cases where resource reuse hurts latency:
   - Reusing processor 2 for multiple long-latency operations (like 6 and 10) can lead to increased waiting times and overall latency due to contention.
 
 C. Pipelining and Register/Memory Insertion Guidance
+
 - Best locations to insert registers/FIFOs/buffers/memory:
   - Between operations 6 and 10 (edge [6, 10]) due to its critical path status and a significant schedule gap of 20.0 units.
   - Between operations 2 and 10 (edge [2, 10]) and operations 3 and 10 (edge [3, 10]) due to their respective schedule gaps of 31.0 and 28.0 units.
+
 - Candidate dependency edges for pipelining:
   - Edges [6, 10], [2, 10], [3, 10], and [5, 10] are good candidates for pipelining due to their schedule gaps and communication costs.
+
 - Suggested pipeline stages:
   - Introduce registers between operations 6 and 10 to break the long combinational path and improve timing closure.
   - Consider inserting registers between operations 2, 3, and 10 to balance the pipeline stages and improve throughput.
+
 - How pipelining improves scheduling:
   - Pipelining can help improve clock frequency and throughput by breaking long paths, allowing for better stage balance and reducing the overall critical path length.
 
@@ -44,23 +56,32 @@ D. Direct Answer: Where to Introduce Register/Memory?
 - Introduce registers on the edge [6, 10] to break the long combinational path and improve timing closure. This location helps by reducing the critical path length and allowing for better scheduling of dependent operations.
 
 E. PPA Optimization Recommendations
+
 - Latency:
   - Introduce registers on critical paths to reduce the effective latency of dependent operations.
+
 - Area:
   - Adding registers may increase area slightly, but it can be justified by the reduction in critical path length and improved timing.
+
 - Power:
   - Pipelining can help reduce dynamic power consumption by allowing for lower clock frequencies while maintaining throughput.
+
 - Throughput:
   - Pipelining and adding registers can significantly improve throughput by allowing multiple operations to be processed in parallel.
+
 - Tradeoff summary:
   - The tradeoff between adding resources and reusing resources should focus on balancing latency improvements with area and power considerations. Adding registers may increase area but can lead to significant latency and throughput benefits.
 
 F. Next Actions for the HLS Designer
+
 - Concrete next steps:
   - Analyze the potential for adding registers on the identified edges and evaluate the impact on the overall schedule.
+
 - Scheduling changes:
   - Reschedule operations 6 and 10 to better utilize available resources and reduce contention.
+
 - Hardware/resource changes:
   - Consider adding an additional processing unit to alleviate contention on processor 2.
+
 - What to verify after changes:
   - Verify the new schedule for improved makespan and check the impact of register insertion on timing and throughput.

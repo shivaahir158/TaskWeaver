@@ -15,6 +15,8 @@ What this script does:
    - LLM+BO-Heuristic
    - GNN-Imitation
    - Decima-like-RL
+   - Greedy-Heuristic
+   - Genetic-Heuristic
 
 3. Uses LLM in two roles:
    Role 1: Generate initial weights for an interpretable priority function.
@@ -1189,6 +1191,215 @@ def train_decima_like_rl(
     return model
 
 
+
+# ============================================================
+# Greedy and Genetic Algorithm Weight Optimization
+# ============================================================
+
+def evaluate_weights_on_data(
+    weights: Dict[str, float],
+    data: List[Tuple[str, nx.DiGraph]],
+    num_processors: int,
+) -> float:
+    """
+    Fitness/objective function.
+    Lower value is better because we minimize average makespan.
+    """
+    total = 0.0
+    for _, dag in data:
+        result = weighted_feature_schedule(dag, num_processors, weights)
+        total += result.makespan
+    return total / max(1, len(data))
+
+
+def greedy_optimize_weights(
+    train_data: List[Tuple[str, nx.DiGraph]],
+    num_processors: int,
+    initial_weights: Optional[Dict[str, float]] = None,
+    step_size: float = 0.25,
+    max_iters: int = 40,
+    min_weight: float = -2.0,
+    max_weight: float = 2.0,
+) -> Dict[str, float]:
+    """
+    Greedy local-search optimizer.
+
+    Idea:
+    - Start from initial feature weights.
+    - Try increasing or decreasing one feature weight at a time.
+    - Keep the move only if it reduces average training makespan.
+    - Stop when no single-feature move improves the schedule.
+
+    This is simple, explainable, and fast, but it can get stuck in a local optimum.
+    """
+    if initial_weights is None:
+        initial_weights = {
+            "upward_rank": 1.0,
+            "downward_rank": 0.25,
+            "depth": 0.30,
+            "fanout": 0.20,
+            "indegree": 0.05,
+            "avg_comm_out": 0.35,
+            "avg_cost": 0.10,
+        }
+
+    weights = {name: float(initial_weights.get(name, 0.0)) for name in FEATURE_NAMES}
+    best_score = evaluate_weights_on_data(weights, train_data, num_processors)
+
+    print("\n[Greedy] Initial training makespan:", round(best_score, 3))
+
+    for it in range(max_iters):
+        improved = False
+        best_candidate = dict(weights)
+        best_candidate_score = best_score
+
+        for feature in FEATURE_NAMES:
+            for direction in [-1.0, 1.0]:
+                candidate = dict(weights)
+                candidate[feature] = float(
+                    np.clip(candidate[feature] + direction * step_size, min_weight, max_weight)
+                )
+
+                score = evaluate_weights_on_data(candidate, train_data, num_processors)
+
+                if score < best_candidate_score:
+                    best_candidate = candidate
+                    best_candidate_score = score
+                    improved = True
+
+        if not improved:
+            print(f"[Greedy] Stopped at iteration {it + 1}; no better single move found.")
+            break
+
+        weights = best_candidate
+        best_score = best_candidate_score
+        print(f"[Greedy] iter={it + 1:02d}, best_training_makespan={best_score:.3f}")
+
+    print("[Greedy] Final weights:")
+    print(json.dumps(weights, indent=2))
+    return weights
+
+
+def random_weight_vector(min_weight: float = -2.0, max_weight: float = 2.0) -> Dict[str, float]:
+    return {
+        name: random.uniform(min_weight, max_weight)
+        for name in FEATURE_NAMES
+    }
+
+
+def crossover_weights(
+    parent_a: Dict[str, float],
+    parent_b: Dict[str, float],
+) -> Dict[str, float]:
+    """
+    Uniform crossover:
+    for each feature, randomly inherit from parent A or parent B.
+    """
+    child = {}
+    for name in FEATURE_NAMES:
+        child[name] = parent_a[name] if random.random() < 0.5 else parent_b[name]
+    return child
+
+
+def mutate_weights(
+    weights: Dict[str, float],
+    mutation_rate: float = 0.20,
+    mutation_strength: float = 0.30,
+    min_weight: float = -2.0,
+    max_weight: float = 2.0,
+) -> Dict[str, float]:
+    """
+    Randomly perturb some feature weights.
+    """
+    out = dict(weights)
+    for name in FEATURE_NAMES:
+        if random.random() < mutation_rate:
+            out[name] = float(
+                np.clip(
+                    out[name] + random.gauss(0.0, mutation_strength),
+                    min_weight,
+                    max_weight,
+                )
+            )
+    return out
+
+
+def genetic_optimize_weights(
+    train_data: List[Tuple[str, nx.DiGraph]],
+    num_processors: int,
+    population_size: int = 24,
+    generations: int = 35,
+    elite_count: int = 4,
+    mutation_rate: float = 0.20,
+    mutation_strength: float = 0.30,
+    seed_weights: Optional[Dict[str, float]] = None,
+) -> Dict[str, float]:
+    """
+    Genetic Algorithm optimizer.
+
+    Idea:
+    - Each individual is a feature-weight vector.
+    - Fitness = average makespan on training DAGs.
+    - Lower makespan is better.
+    - Keep the best individuals as elites.
+    - Create children using crossover and mutation.
+    - GA explores more globally than greedy search, but takes more time.
+    """
+    population: List[Dict[str, float]] = []
+
+    if seed_weights is not None:
+        population.append({name: float(seed_weights.get(name, 0.0)) for name in FEATURE_NAMES})
+
+    while len(population) < population_size:
+        population.append(random_weight_vector())
+
+    def score_individual(w: Dict[str, float]) -> float:
+        return evaluate_weights_on_data(w, train_data, num_processors)
+
+    best_weights = None
+    best_score = float("inf")
+
+    print("\n[Genetic] Starting genetic optimization...")
+
+    for gen in range(generations):
+        scored = [(score_individual(ind), ind) for ind in population]
+        scored.sort(key=lambda x: x[0])
+
+        if scored[0][0] < best_score:
+            best_score = scored[0][0]
+            best_weights = dict(scored[0][1])
+
+        print(f"[Genetic] generation={gen + 1:02d}, best_training_makespan={scored[0][0]:.3f}")
+
+        elites = [dict(ind) for _, ind in scored[:elite_count]]
+        next_population = list(elites)
+
+        # Tournament selection.
+        def select_parent() -> Dict[str, float]:
+            k = min(3, len(scored))
+            candidates = random.sample(scored, k=k)
+            candidates.sort(key=lambda x: x[0])
+            return candidates[0][1]
+
+        while len(next_population) < population_size:
+            parent_a = select_parent()
+            parent_b = select_parent()
+            child = crossover_weights(parent_a, parent_b)
+            child = mutate_weights(
+                child,
+                mutation_rate=mutation_rate,
+                mutation_strength=mutation_strength,
+            )
+            next_population.append(child)
+
+        population = next_population
+
+    assert best_weights is not None
+    print("[Genetic] Final weights:")
+    print(json.dumps(best_weights, indent=2))
+    return best_weights
+
+
 # ============================================================
 # Evaluation
 # ============================================================
@@ -1289,6 +1500,9 @@ def main() -> None:
     parser.add_argument("--train-episodes", type=int, default=80)
     parser.add_argument("--gnn-epochs", type=int, default=80)
     parser.add_argument("--bo-calls", type=int, default=30)
+    parser.add_argument("--greedy-iters", type=int, default=40)
+    parser.add_argument("--ga-population", type=int, default=24)
+    parser.add_argument("--ga-generations", type=int, default=35)
     parser.add_argument("--use-llm", action="store_true")
     parser.add_argument("--openai-model", type=str, default="gpt-4o-mini")
     parser.add_argument("--out", type=str, default="sample_scheduler_results.csv")
@@ -1296,7 +1510,7 @@ def main() -> None:
         "--insight-method",
         type=str,
         default="LLM+BO-Heuristic",
-        choices=["HEFT", "CPOP", "LLM-Heuristic", "LLM+BO-Heuristic", "GNN-Imitation", "Decima-like-RL"],
+        choices=["HEFT", "CPOP", "LLM-Heuristic", "LLM+BO-Heuristic", "Greedy-Heuristic", "Genetic-Heuristic", "GNN-Imitation", "Decima-like-RL"],
         help="Which method schedule should be sent to the LLM insight module.",
     )
 
@@ -1319,6 +1533,8 @@ def main() -> None:
 
     llm_weights = None
     bo_weights = None
+    greedy_weights = None
+    genetic_weights = None
 
     if args.use_llm:
         llm_weights = llm_propose_weights(test_data[0][1], model=args.openai_model)
@@ -1332,6 +1548,33 @@ def main() -> None:
             n_calls=args.bo_calls,
             seed=args.seed,
         )
+
+    # Greedy improves the interpretable priority weights by local search.
+    greedy_seed = bo_weights or llm_weights or {
+        "upward_rank": 1.0,
+        "downward_rank": 0.25,
+        "depth": 0.30,
+        "fanout": 0.20,
+        "indegree": 0.05,
+        "avg_comm_out": 0.35,
+        "avg_cost": 0.10,
+    }
+
+    greedy_weights = greedy_optimize_weights(
+        train_data=train_data,
+        num_processors=args.num_processors,
+        initial_weights=greedy_seed,
+        max_iters=args.greedy_iters,
+    )
+
+    # Genetic algorithm improves the same weight vector using population search.
+    genetic_weights = genetic_optimize_weights(
+        train_data=train_data,
+        num_processors=args.num_processors,
+        population_size=args.ga_population,
+        generations=args.ga_generations,
+        seed_weights=greedy_weights,
+    )
 
     gnn_model = train_gnn_imitation(train_data, epochs=args.gnn_epochs)
     rl_model = train_decima_like_rl(train_data, args.num_processors, episodes=args.train_episodes)
@@ -1368,6 +1611,22 @@ def main() -> None:
         )
         all_rows += rows
         schedules_by_method["LLM+BO-Heuristic"] = schedules
+
+    if greedy_weights is not None:
+        rows, schedules = evaluate_method(
+            "Greedy-Heuristic", test_data, args.num_processors,
+            lambda dag: weighted_feature_schedule(dag, args.num_processors, greedy_weights),
+        )
+        all_rows += rows
+        schedules_by_method["Greedy-Heuristic"] = schedules
+
+    if genetic_weights is not None:
+        rows, schedules = evaluate_method(
+            "Genetic-Heuristic", test_data, args.num_processors,
+            lambda dag: weighted_feature_schedule(dag, args.num_processors, genetic_weights),
+        )
+        all_rows += rows
+        schedules_by_method["Genetic-Heuristic"] = schedules
 
     if gnn_model is not None:
         rows, schedules = evaluate_method(
