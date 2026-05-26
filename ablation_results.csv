@@ -1,0 +1,9 @@
+Algorithm,Original Algo,Original Algo + Motifs,Original Algo + BO,Original Algo + Motifs + BO,Original Algo + Configs + BO (LLM for Weight Generation)
+GNN,85.33,85.33,85.33,85.33,85.33
+Greedy-EFT,86.67,86.0,86.0,86.0,86.0
+HEFT,85.33,85.33,85.33,85.33,85.33
+HOFT,85.33,85.33,85.33,85.33,85.33
+CPOP,85.33,85.33,85.33,85.33,85.33
+PEFT,85.33,85.33,85.33,85.33,85.33
+Decima,85.33,85.67,85.33,85.67,85.67
+LLM,85.33,85.33,85.33,85.33,85.33

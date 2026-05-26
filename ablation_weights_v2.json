@@ -1,0 +1,418 @@
+{
+  "GNN": {
+    "Original Algo": {
+      "upward_rank": 1.1,
+      "downward_rank": 0.3,
+      "depth": 0.35,
+      "fanout": 0.5,
+      "indegree": 0.1,
+      "avg_comm_out": 0.25,
+      "avg_cost": 0.1,
+      "motif_score": 0.0
+    },
+    "Original Algo + Motifs": {
+      "upward_rank": 1.1,
+      "downward_rank": 0.3,
+      "depth": 0.35,
+      "fanout": 0.575,
+      "indegree": 0.11499999999999999,
+      "avg_comm_out": 0.25,
+      "avg_cost": 0.1,
+      "motif_score": 1.0
+    },
+    "Original Algo + BO": {
+      "upward_rank": 2.0,
+      "downward_rank": -0.8554975496038812,
+      "depth": 0.23336208227681343,
+      "fanout": 0.8239977075795606,
+      "indegree": -0.44204403903399636,
+      "avg_comm_out": 0.5114863963162595,
+      "avg_cost": 0.6539193291489127,
+      "motif_score": -2.0
+    },
+    "Original Algo + Motifs + BO": {
+      "upward_rank": 2.0,
+      "downward_rank": -2.0,
+      "depth": 0.018424343847332825,
+      "fanout": 0.6118853808000742,
+      "indegree": 1.1964221323190434,
+      "avg_comm_out": 0.3313323806845845,
+      "avg_cost": 0.7540938037558464,
+      "motif_score": 1.7441188972412083
+    },
+    "Original Algo + Configs + BO (LLM for Weight Generation)": {
+      "upward_rank": 2.0,
+      "downward_rank": -2.0,
+      "depth": -2.0,
+      "fanout": 2.0,
+      "indegree": -2.0,
+      "avg_comm_out": -0.16073574732996265,
+      "avg_cost": 1.4901571106432119,
+      "motif_score": 2.0
+    }
+  },
+  "Greedy-EFT": {
+    "Original Algo": {
+      "upward_rank": 0.2,
+      "downward_rank": 0.1,
+      "depth": 0.1,
+      "fanout": 0.1,
+      "indegree": 0.0,
+      "avg_comm_out": 0.0,
+      "avg_cost": -1.0,
+      "motif_score": 0.0
+    },
+    "Original Algo + Motifs": {
+      "upward_rank": 0.2,
+      "downward_rank": 0.1,
+      "depth": 0.1,
+      "fanout": 0.11499999999999999,
+      "indegree": 0.0,
+      "avg_comm_out": 0.0,
+      "avg_cost": -1.0,
+      "motif_score": 1.0
+    },
+    "Original Algo + BO": {
+      "upward_rank": 2.0,
+      "downward_rank": -2.0,
+      "depth": -2.0,
+      "fanout": 2.0,
+      "indegree": -2.0,
+      "avg_comm_out": 0.7553372977155299,
+      "avg_cost": 1.5070970285360863,
+      "motif_score": -1.7810465831360442
+    },
+    "Original Algo + Motifs + BO": {
+      "upward_rank": 2.0,
+      "downward_rank": -2.0,
+      "depth": -2.0,
+      "fanout": 2.0,
+      "indegree": 2.0,
+      "avg_comm_out": 0.9468396805415744,
+      "avg_cost": 2.0,
+      "motif_score": 1.265381069723377
+    },
+    "Original Algo + Configs + BO (LLM for Weight Generation)": {
+      "upward_rank": 2.0,
+      "downward_rank": -2.0,
+      "depth": 1.0585898898627266,
+      "fanout": 2.0,
+      "indegree": -1.412157079506521,
+      "avg_comm_out": 2.0,
+      "avg_cost": 1.5332391017029585,
+      "motif_score": 2.0
+    }
+  },
+  "HEFT": {
+    "Original Algo": {
+      "upward_rank": 1.0,
+      "downward_rank": 0.0,
+      "depth": 0.2,
+      "fanout": 0.1,
+      "indegree": 0.0,
+      "avg_comm_out": 0.2,
+      "avg_cost": 0.1,
+      "motif_score": 0.0
+    },
+    "Original Algo + Motifs": {
+      "upward_rank": 1.0,
+      "downward_rank": 0.0,
+      "depth": 0.2,
+      "fanout": 0.11499999999999999,
+      "indegree": 0.0,
+      "avg_comm_out": 0.2,
+      "avg_cost": 0.1,
+      "motif_score": 1.0
+    },
+    "Original Algo + BO": {
+      "upward_rank": 1.0,
+      "downward_rank": 0.0,
+      "depth": 0.2,
+      "fanout": 0.1,
+      "indegree": 0.0,
+      "avg_comm_out": 0.2,
+      "avg_cost": 0.1,
+      "motif_score": 0.0
+    },
+    "Original Algo + Motifs + BO": {
+      "upward_rank": 2.0,
+      "downward_rank": -2.0,
+      "depth": -2.0,
+      "fanout": 2.0,
+      "indegree": -2.0,
+      "avg_comm_out": 0.9941614678462405,
+      "avg_cost": 1.465590787747713,
+      "motif_score": 1.1507001107718362
+    },
+    "Original Algo + Configs + BO (LLM for Weight Generation)": {
+      "upward_rank": 2.0,
+      "downward_rank": -2.0,
+      "depth": 1.0585898898627266,
+      "fanout": 2.0,
+      "indegree": -1.412157079506521,
+      "avg_comm_out": 2.0,
+      "avg_cost": 1.5332391017029585,
+      "motif_score": 2.0
+    }
+  },
+  "HOFT": {
+    "Original Algo": {
+      "upward_rank": 1.1,
+      "downward_rank": 0.3,
+      "depth": 0.3,
+      "fanout": 0.2,
+      "indegree": 0.0,
+      "avg_comm_out": 0.3,
+      "avg_cost": 0.1,
+      "motif_score": 0.0
+    },
+    "Original Algo + Motifs": {
+      "upward_rank": 1.1,
+      "downward_rank": 0.3,
+      "depth": 0.3,
+      "fanout": 0.22999999999999998,
+      "indegree": 0.0,
+      "avg_comm_out": 0.3,
+      "avg_cost": 0.1,
+      "motif_score": 1.0
+    },
+    "Original Algo + BO": {
+      "upward_rank": 2.0,
+      "downward_rank": -0.6109570035845371,
+      "depth": -1.3784707724362688,
+      "fanout": 2.0,
+      "indegree": -0.8873399035767624,
+      "avg_comm_out": 0.5892612020141543,
+      "avg_cost": 0.9974714777376104,
+      "motif_score": 0.7988658324722726
+    },
+    "Original Algo + Motifs + BO": {
+      "upward_rank": 1.2003908983519005,
+      "downward_rank": -2.0,
+      "depth": -0.7900882645517417,
+      "fanout": 2.0,
+      "indegree": -1.1390183411504107,
+      "avg_comm_out": 1.3898795194349054,
+      "avg_cost": 1.2917121935218137,
+      "motif_score": 1.3789678422455856
+    },
+    "Original Algo + Configs + BO (LLM for Weight Generation)": {
+      "upward_rank": 2.0,
+      "downward_rank": -2.0,
+      "depth": 1.0585898898627266,
+      "fanout": 2.0,
+      "indegree": -1.412157079506521,
+      "avg_comm_out": 2.0,
+      "avg_cost": 1.5332391017029585,
+      "motif_score": 2.0
+    }
+  },
+  "CPOP": {
+    "Original Algo": {
+      "upward_rank": 1.0,
+      "downward_rank": 1.0,
+      "depth": 0.1,
+      "fanout": 0.0,
+      "indegree": 0.0,
+      "avg_comm_out": 0.1,
+      "avg_cost": 0.1,
+      "motif_score": 0.0
+    },
+    "Original Algo + Motifs": {
+      "upward_rank": 1.0,
+      "downward_rank": 1.0,
+      "depth": 0.1,
+      "fanout": 0.0,
+      "indegree": 0.0,
+      "avg_comm_out": 0.1,
+      "avg_cost": 0.1,
+      "motif_score": 1.0
+    },
+    "Original Algo + BO": {
+      "upward_rank": 2.0,
+      "downward_rank": -2.0,
+      "depth": -2.0,
+      "fanout": 0.4775046981067912,
+      "indegree": -0.7254823262914465,
+      "avg_comm_out": 1.1785707958055998,
+      "avg_cost": 1.4426980628765254,
+      "motif_score": -0.8997213726710942
+    },
+    "Original Algo + Motifs + BO": {
+      "upward_rank": 2.0,
+      "downward_rank": 2.0,
+      "depth": -2.0,
+      "fanout": 2.0,
+      "indegree": 2.0,
+      "avg_comm_out": 0.604601167207889,
+      "avg_cost": 0.883528172195486,
+      "motif_score": 2.0
+    },
+    "Original Algo + Configs + BO (LLM for Weight Generation)": {
+      "upward_rank": 2.0,
+      "downward_rank": -2.0,
+      "depth": -2.0,
+      "fanout": 2.0,
+      "indegree": -2.0,
+      "avg_comm_out": 2.0,
+      "avg_cost": 2.0,
+      "motif_score": -0.8425481035187397
+    }
+  },
+  "PEFT": {
+    "Original Algo": {
+      "upward_rank": 0.9,
+      "downward_rank": 0.4,
+      "depth": 0.25,
+      "fanout": 0.15,
+      "indegree": 0.05,
+      "avg_comm_out": 0.25,
+      "avg_cost": 0.2,
+      "motif_score": 0.0
+    },
+    "Original Algo + Motifs": {
+      "upward_rank": 0.9,
+      "downward_rank": 0.4,
+      "depth": 0.25,
+      "fanout": 0.1725,
+      "indegree": 0.057499999999999996,
+      "avg_comm_out": 0.25,
+      "avg_cost": 0.2,
+      "motif_score": 1.0
+    },
+    "Original Algo + BO": {
+      "upward_rank": 2.0,
+      "downward_rank": -2.0,
+      "depth": -2.0,
+      "fanout": 2.0,
+      "indegree": -0.08443157223307085,
+      "avg_comm_out": 0.23116412351578708,
+      "avg_cost": 0.5350045586402667,
+      "motif_score": 1.3517109763142807
+    },
+    "Original Algo + Motifs + BO": {
+      "upward_rank": 2.0,
+      "downward_rank": 0.11055793416709436,
+      "depth": -0.3679399451326104,
+      "fanout": -0.7809858362073787,
+      "indegree": -1.335673963064854,
+      "avg_comm_out": 0.21244987505551283,
+      "avg_cost": 0.4765902003921454,
+      "motif_score": 0.2631142520597223
+    },
+    "Original Algo + Configs + BO (LLM for Weight Generation)": {
+      "upward_rank": 2.0,
+      "downward_rank": -2.0,
+      "depth": -2.0,
+      "fanout": 2.0,
+      "indegree": -2.0,
+      "avg_comm_out": 2.0,
+      "avg_cost": 2.0,
+      "motif_score": -0.8425481035187397
+    }
+  },
+  "Decima": {
+    "Original Algo": {
+      "upward_rank": 0.65,
+      "downward_rank": 0.25,
+      "depth": 0.5,
+      "fanout": 0.65,
+      "indegree": -0.1,
+      "avg_comm_out": 0.2,
+      "avg_cost": 0.05,
+      "motif_score": 0.0
+    },
+    "Original Algo + Motifs": {
+      "upward_rank": 0.65,
+      "downward_rank": 0.25,
+      "depth": 0.5,
+      "fanout": 0.7474999999999999,
+      "indegree": -0.11499999999999999,
+      "avg_comm_out": 0.2,
+      "avg_cost": 0.05,
+      "motif_score": 1.0
+    },
+    "Original Algo + BO": {
+      "upward_rank": 1.274031285850266,
+      "downward_rank": -2.0,
+      "depth": -2.0,
+      "fanout": 1.2539869101003904,
+      "indegree": -1.1175034190878863,
+      "avg_comm_out": 1.1302794722975036,
+      "avg_cost": 2.0,
+      "motif_score": -2.0
+    },
+    "Original Algo + Motifs + BO": {
+      "upward_rank": 2.0,
+      "downward_rank": -2.0,
+      "depth": -2.0,
+      "fanout": 2.0,
+      "indegree": -2.0,
+      "avg_comm_out": 1.2890784449568327,
+      "avg_cost": 1.076293190165294,
+      "motif_score": 2.0
+    },
+    "Original Algo + Configs + BO (LLM for Weight Generation)": {
+      "upward_rank": 2.0,
+      "downward_rank": -2.0,
+      "depth": -2.0,
+      "fanout": 2.0,
+      "indegree": -2.0,
+      "avg_comm_out": 2.0,
+      "avg_cost": 2.0,
+      "motif_score": -0.8425481035187397
+    }
+  },
+  "LLM": {
+    "Original Algo": {
+      "upward_rank": 1.0,
+      "downward_rank": 0.25,
+      "depth": 0.35,
+      "fanout": 0.35,
+      "indegree": 0.05,
+      "avg_comm_out": 0.35,
+      "avg_cost": 0.1,
+      "motif_score": 0.0
+    },
+    "Original Algo + Motifs": {
+      "upward_rank": 1.0,
+      "downward_rank": 0.25,
+      "depth": 0.35,
+      "fanout": 0.40249999999999997,
+      "indegree": 0.057499999999999996,
+      "avg_comm_out": 0.35,
+      "avg_cost": 0.1,
+      "motif_score": 1.0
+    },
+    "Original Algo + BO": {
+      "upward_rank": 2.0,
+      "downward_rank": -1.4038619986504317,
+      "depth": -2.0,
+      "fanout": 0.7318190294422786,
+      "indegree": 0.07291991350078497,
+      "avg_comm_out": 0.7019089968142107,
+      "avg_cost": 1.0702008789928779,
+      "motif_score": -2.0
+    },
+    "Original Algo + Motifs + BO": {
+      "upward_rank": 1.3818192601605337,
+      "downward_rank": -1.4912801928072983,
+      "depth": -1.3110108223744148,
+      "fanout": 0.9545306813347656,
+      "indegree": -2.0,
+      "avg_comm_out": 0.6487890696973073,
+      "avg_cost": 0.5311843960637526,
+      "motif_score": 0.9952165810866891
+    },
+    "Original Algo + Configs + BO (LLM for Weight Generation)": {
+      "upward_rank": 2.0,
+      "downward_rank": -2.0,
+      "depth": 2.0,
+      "fanout": 0.5132081419559795,
+      "indegree": 2.0,
+      "avg_comm_out": 0.8540758162760702,
+      "avg_cost": 1.6800872146465515,
+      "motif_score": 1.404422505231163
+    }
+  }
+}

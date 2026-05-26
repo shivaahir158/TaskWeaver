@@ -1,0 +1,36 @@
+### Technical Explanation of Scheduling Ablation Results
+
+#### 1. Why the Best Method Wins
+The best method identified is the "Greedy-EFT" algorithm with the variant "Original Algo + Configs + BO (LLM for Weight Generation)," achieving a score of 314.7. This method excels due to its effective combination of heuristic scheduling and optimized weight tuning, which minimizes execution time while maintaining resource efficiency. The integration of configurations and Bayesian Optimization (BO) allows for adaptive scheduling that responds to the specific characteristics of the task graph, leading to improved performance.
+
+#### 2. Features Likely Helping Performance
+The following features likely contributed to the performance improvements observed:
+- **Upward Rank**: Prioritizes tasks that are critical for downstream execution, reducing overall latency.
+- **Downward Rank**: Helps in scheduling tasks that can be executed in parallel, maximizing resource utilization.
+- **Depth**: Affects the critical path length; minimizing depth can lead to faster execution.
+- **Fanout**: High fanout tasks can be scheduled in parallel, improving throughput.
+- **Indegree**: Tasks with lower indegree can be scheduled earlier, reducing waiting times.
+- **Avg Comm Out**: Lower communication overhead between tasks can lead to reduced execution time.
+- **Avg Cost**: Balancing the cost of scheduling with execution time is crucial for efficiency.
+- **Motif Score**: Identifies recurring patterns in the task graph, allowing for optimized scheduling based on historical performance.
+
+#### 3. How Motifs Helped Scheduling
+Motifs, or recurring substructures within the task graph, provide insights into common execution patterns. By recognizing these motifs, the scheduling algorithm can optimize task placement and execution order, leading to reduced communication overhead and improved parallelism. This results in a more efficient use of resources and shorter execution times.
+
+#### 4. How BO Helped Weight Tuning
+Bayesian Optimization (BO) is a powerful technique for hyperparameter tuning that systematically explores the configuration space to find optimal settings. In this context, BO fine-tunes the weights associated with various scheduling features, allowing the algorithm to adaptively prioritize tasks based on their impact on performance. This leads to a more informed scheduling strategy that can dynamically adjust to the characteristics of the workload.
+
+#### 5. How LLM-Generated Weights Helped Initialize BO
+The use of Large Language Models (LLMs) for weight generation provides a strong initialization for the BO process. By leveraging pre-trained models that understand the relationships between scheduling features and performance outcomes, the initial weights can be set closer to optimal values. This reduces the exploration time required by BO, allowing it to converge more quickly to the best configuration.
+
+#### 6. Hardware Insight: Pipelining/Register/FIFO Insertion
+In hardware implementations, techniques such as pipelining, register insertion, and FIFO buffers are crucial for enhancing throughput and minimizing latency. Pipelining allows multiple tasks to be processed simultaneously at different stages, while register insertion can help manage data dependencies and reduce bottlenecks. FIFO buffers facilitate smooth data flow between tasks, ensuring that resources are utilized efficiently without idle times.
+
+#### 7. PPA Tradeoffs: Latency, Area, Power, Throughput
+The scheduling strategies employed must balance several Performance, Power, and Area (PPA) tradeoffs:
+- **Latency**: Optimized scheduling reduces execution time, directly impacting latency.
+- **Area**: Efficient scheduling can minimize the need for additional hardware resources, conserving area.
+- **Power**: By reducing execution time and optimizing resource usage, power consumption can be lowered.
+- **Throughput**: Improved scheduling strategies enhance the overall throughput of the system by maximizing parallel execution and minimizing idle times.
+
+In conclusion, the combination of Greedy-EFT with advanced techniques such as motifs, BO, and LLM-generated weights leads to significant performance improvements in scheduling, making it the best-performing method in this analysis.

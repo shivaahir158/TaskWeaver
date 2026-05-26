@@ -424,6 +424,170 @@ def cpop_schedule(dag: nx.DiGraph, num_processors: int) -> ScheduleResult:
     return list_schedule(dag, num_processors, lambda v: ur[v] + dr[v])
 
 
+# ============================================================
+# Modern non-ML heterogeneous DAG baselines: PEFT and HOFT
+# ============================================================
+
+def optimistic_cost_table(dag: nx.DiGraph, num_processors: int) -> Dict[int, List[float]]:
+    """
+    Optimistic Cost Table (OCT)-style lookahead used by PEFT/HOFT-like heuristics.
+
+    oct_table[v][p] estimates the optimistic remaining cost after scheduling task v
+    on processor p. It is computed backward over the DAG using the best successor
+    continuation across processors.
+    """
+    oct_table: Dict[int, List[float]] = {
+        v: [0.0 for _ in range(num_processors)]
+        for v in dag.nodes()
+    }
+
+    for v in reversed(list(nx.topological_sort(dag))):
+        successors = list(dag.successors(v))
+        if not successors:
+            continue
+
+        for p in range(num_processors):
+            worst_successor_continuation = 0.0
+            for succ in successors:
+                best_succ_cost = float("inf")
+                for q in range(num_processors):
+                    comm = 0.0 if p == q else float(dag.edges[v, succ]["comm"])
+                    candidate = (
+                        comm
+                        + float(dag.nodes[succ]["costs"][q])
+                        + oct_table[succ][q]
+                    )
+                    best_succ_cost = min(best_succ_cost, candidate)
+                worst_successor_continuation = max(
+                    worst_successor_continuation,
+                    best_succ_cost,
+                )
+            oct_table[v][p] = worst_successor_continuation
+
+    return oct_table
+
+
+def _schedule_with_priority_and_processor_policy(
+    dag: nx.DiGraph,
+    num_processors: int,
+    priority_fn: Callable[[int], float],
+    processor_score_fn: Callable[
+        [int, int, float, float, List[float], Dict[int, float], Dict[int, int]],
+        float,
+    ],
+) -> ScheduleResult:
+    """
+    Generic list scheduler where the task order and processor assignment policy
+    can both be customized. Lower processor score is better.
+    """
+    completed = set()
+    scheduled = set()
+    assignment, start_times, finish_times = {}, {}, {}
+    proc_available = [0.0] * num_processors
+
+    while len(completed) < dag.number_of_nodes():
+        ready = [
+            v for v in dag.nodes()
+            if v not in scheduled and all(p in completed for p in dag.predecessors(v))
+        ]
+        if not ready:
+            raise RuntimeError("No ready tasks found.")
+
+        task = max(ready, key=priority_fn)
+
+        best_proc, best_start, best_finish = None, None, float("inf")
+        best_score = float("inf")
+        for p in range(num_processors):
+            start, finish = earliest_start_finish(
+                dag, task, p, proc_available, finish_times, assignment
+            )
+            score = processor_score_fn(
+                task, p, start, finish, proc_available, finish_times, assignment
+            )
+            if score < best_score or (score == best_score and finish < best_finish):
+                best_proc, best_start, best_finish = p, start, finish
+                best_score = score
+
+        assignment[task] = int(best_proc)
+        start_times[task] = float(best_start)
+        finish_times[task] = float(best_finish)
+        proc_available[best_proc] = float(best_finish)
+        scheduled.add(task)
+        completed.add(task)
+
+    return ScheduleResult(
+        makespan=max(finish_times.values()),
+        assignment=assignment,
+        start_times=start_times,
+        finish_times=finish_times,
+    )
+
+
+def peft_schedule(dag: nx.DiGraph, num_processors: int) -> ScheduleResult:
+    """
+    PEFT-style baseline.
+
+    Keeps the HEFT upward-rank task priority, but uses an optimistic lookahead
+    term during processor selection. This makes processor assignment aware of
+    how the current mapping may affect successor completion.
+    """
+    ur = upward_rank(dag)
+    oct_table = optimistic_cost_table(dag, num_processors)
+
+    def processor_score(
+        task: int,
+        proc: int,
+        start: float,
+        finish: float,
+        proc_available: List[float],
+        finish_times: Dict[int, float],
+        assignment: Dict[int, int],
+    ) -> float:
+        return finish + oct_table[task][proc]
+
+    return _schedule_with_priority_and_processor_policy(
+        dag=dag,
+        num_processors=num_processors,
+        priority_fn=lambda v: ur[v],
+        processor_score_fn=processor_score,
+    )
+
+
+def hoft_schedule(dag: nx.DiGraph, num_processors: int) -> ScheduleResult:
+    """
+    HOFT-style baseline.
+
+    Uses optimistic finish-time lookahead in both task prioritization and
+    processor selection. Tasks with larger optimistic downstream cost are
+    scheduled earlier, then mapped to the processor that minimizes the
+    optimistic finish objective.
+    """
+    oct_table = optimistic_cost_table(dag, num_processors)
+
+    def optimistic_priority(task: int) -> float:
+        avg_task_cost = avg_cost(dag, task)
+        avg_optimistic_tail = float(np.mean(oct_table[task]))
+        return avg_task_cost + avg_optimistic_tail
+
+    def processor_score(
+        task: int,
+        proc: int,
+        start: float,
+        finish: float,
+        proc_available: List[float],
+        finish_times: Dict[int, float],
+        assignment: Dict[int, int],
+    ) -> float:
+        return finish + oct_table[task][proc]
+
+    return _schedule_with_priority_and_processor_policy(
+        dag=dag,
+        num_processors=num_processors,
+        priority_fn=optimistic_priority,
+        processor_score_fn=processor_score,
+    )
+
+
 def weighted_feature_schedule(
     dag: nx.DiGraph,
     num_processors: int,
@@ -1134,7 +1298,7 @@ def main() -> None:
         "--insight-method",
         type=str,
         default="LLM+BO-Heuristic",
-        choices=["HEFT", "CPOP", "LLM-Heuristic", "LLM+BO-Heuristic",
+        choices=["HEFT", "CPOP", "PEFT", "HOFT", "LLM-Heuristic", "LLM+BO-Heuristic",
                  "BO-Cold-Heuristic", "GNN-Imitation", "Decima-like-RL"],
     )
 
@@ -1233,6 +1397,20 @@ def main() -> None:
         )
         all_rows += rows
         final_schedules["CPOP"] = scheds
+
+        rows, scheds = evaluate_method(
+            "PEFT", test_data, args.num_processors,
+            lambda dag: peft_schedule(dag, args.num_processors),
+        )
+        all_rows += rows
+        final_schedules["PEFT"] = scheds
+
+        rows, scheds = evaluate_method(
+            "HOFT", test_data, args.num_processors,
+            lambda dag: hoft_schedule(dag, args.num_processors),
+        )
+        all_rows += rows
+        final_schedules["HOFT"] = scheds
 
         if llm_weights is not None:
             rows, scheds = evaluate_method(

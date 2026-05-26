@@ -1,0 +1,16 @@
+{
+  "upward_rank": 1.0383505617257804,
+  "downward_rank": -1.5484693903476352,
+  "depth": -2.0,
+  "fanout": 1.0556002409199348,
+  "indegree": 1.5325303695386974,
+  "avg_comm_out": 1.4374922672974,
+  "avg_cost": -2.0,
+  "min_cost": 2.0,
+  "max_cost": 0.15273140256597495,
+  "cost_spread": 2.0,
+  "succ_count_weighted": 0.5384665239841162,
+  "pred_count_weighted": -0.8179746572640845,
+  "comm_pressure": 0.6036811028774527,
+  "mobility_proxy": 2.0
+}

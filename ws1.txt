@@ -1,0 +1,641 @@
+UNIQUE MOTIFS FROM ONE DAG
+================================================================================
+
+The text file contains the unique connected 5-node motifs mined from a single 
+Directed Acyclic Graph (DAG) representing task dependencies.
+
+For each unique motif, the report shows:
+- motif number
+- motif type
+- number of nodes
+- number of directed edges
+- number of occurrences in this DAG
+- representative edges in canonical 0..4 labeling
+
+Motif types are grouped heuristically as chain, fan-in, fan-out, or fork-join.
+All motifs listed below are unique up to isomorphism over connected induced
+subgraphs of size 5.
+
+========================================================================================
+
+Input DAG summary: 40 nodes, 80 edges
+Connected 5-node induced subgraphs counted: 3540
+Unique motifs found: 87
+
+Unique motif type distribution:
+- chain: 10
+- fan-in: 15
+- fan-out: 13
+- fork-join: 49
+
+==========================================================================================
+
+Motif #1
+Type: fork-join
+Nodes: 5
+Edges: 6
+Occurrences in this DAG: 3
+Representative edges: 1->4, 2->1, 2->4, 3->1, 3->2, 4->0
+--------------------------------------------------------------------------------
+Motif #2
+Type: fork-join
+Nodes: 5
+Edges: 6
+Occurrences in this DAG: 3
+Representative edges: 1->4, 2->0, 3->0, 3->2, 4->2, 4->3
+--------------------------------------------------------------------------------
+Motif #3
+Type: fork-join
+Nodes: 5
+Edges: 6
+Occurrences in this DAG: 2
+Representative edges: 1->4, 2->4, 3->0, 3->1, 3->2, 4->0
+--------------------------------------------------------------------------------
+Motif #4
+Type: fork-join
+Nodes: 5
+Edges: 6
+Occurrences in this DAG: 2
+Representative edges: 1->3, 1->4, 2->1, 2->4, 3->0, 4->0
+--------------------------------------------------------------------------------
+Motif #5
+Type: fork-join
+Nodes: 5
+Edges: 6
+Occurrences in this DAG: 1
+Representative edges: 2->3, 2->4, 3->1, 3->4, 4->0, 4->1
+--------------------------------------------------------------------------------
+Motif #6
+Type: fork-join
+Nodes: 5
+Edges: 6
+Occurrences in this DAG: 1
+Representative edges: 2->3, 2->4, 3->0, 3->1, 4->0, 4->1
+--------------------------------------------------------------------------------
+Motif #7
+Type: fork-join
+Nodes: 5
+Edges: 6
+Occurrences in this DAG: 1
+Representative edges: 1->4, 2->3, 2->4, 3->0, 4->0, 4->3
+--------------------------------------------------------------------------------
+Motif #8
+Type: fork-join
+Nodes: 5
+Edges: 6
+Occurrences in this DAG: 1
+Representative edges: 1->4, 2->1, 3->0, 3->1, 3->2, 4->0
+--------------------------------------------------------------------------------
+Motif #9
+Type: fork-join
+Nodes: 5
+Edges: 6
+Occurrences in this DAG: 1
+Representative edges: 1->4, 2->0, 3->0, 3->1, 4->0, 4->2
+--------------------------------------------------------------------------------
+Motif #10
+Type: fork-join
+Nodes: 5
+Edges: 5
+Occurrences in this DAG: 17
+Representative edges: 2->3, 2->4, 3->1, 4->0, 4->1
+--------------------------------------------------------------------------------
+Motif #11
+Type: fan-in
+Nodes: 5
+Edges: 5
+Occurrences in this DAG: 16
+Representative edges: 1->4, 2->0, 3->0, 4->0, 4->3
+--------------------------------------------------------------------------------
+Motif #12
+Type: fork-join
+Nodes: 5
+Edges: 5
+Occurrences in this DAG: 15
+Representative edges: 1->4, 2->1, 3->0, 4->0, 4->3
+--------------------------------------------------------------------------------
+Motif #13
+Type: fork-join
+Nodes: 5
+Edges: 5
+Occurrences in this DAG: 15
+Representative edges: 1->4, 2->1, 2->4, 3->0, 4->0
+--------------------------------------------------------------------------------
+Motif #14
+Type: fan-in
+Nodes: 5
+Edges: 5
+Occurrences in this DAG: 12
+Representative edges: 2->1, 3->1, 3->2, 4->0, 4->1
+--------------------------------------------------------------------------------
+Motif #15
+Type: fork-join
+Nodes: 5
+Edges: 5
+Occurrences in this DAG: 12
+Representative edges: 1->4, 2->3, 3->1, 3->4, 4->0
+--------------------------------------------------------------------------------
+Motif #16
+Type: fork-join
+Nodes: 5
+Edges: 5
+Occurrences in this DAG: 12
+Representative edges: 1->4, 2->1, 3->0, 3->2, 4->0
+--------------------------------------------------------------------------------
+Motif #17
+Type: fork-join
+Nodes: 5
+Edges: 5
+Occurrences in this DAG: 11
+Representative edges: 2->1, 3->1, 3->2, 4->0, 4->3
+--------------------------------------------------------------------------------
+Motif #18
+Type: fan-in
+Nodes: 5
+Edges: 5
+Occurrences in this DAG: 11
+Representative edges: 2->1, 3->0, 3->1, 4->0, 4->1
+--------------------------------------------------------------------------------
+Motif #19
+Type: fork-join
+Nodes: 5
+Edges: 5
+Occurrences in this DAG: 11
+Representative edges: 1->4, 2->1, 3->0, 3->1, 4->0
+--------------------------------------------------------------------------------
+Motif #20
+Type: fan-in
+Nodes: 5
+Edges: 5
+Occurrences in this DAG: 11
+Representative edges: 1->4, 2->0, 3->0, 3->2, 4->0
+--------------------------------------------------------------------------------
+Motif #21
+Type: fork-join
+Nodes: 5
+Edges: 5
+Occurrences in this DAG: 10
+Representative edges: 1->4, 2->3, 3->0, 4->0, 4->2
+--------------------------------------------------------------------------------
+Motif #22
+Type: fork-join
+Nodes: 5
+Edges: 5
+Occurrences in this DAG: 10
+Representative edges: 1->4, 2->3, 2->4, 3->0, 4->0
+--------------------------------------------------------------------------------
+Motif #23
+Type: fork-join
+Nodes: 5
+Edges: 5
+Occurrences in this DAG: 10
+Representative edges: 1->4, 2->1, 2->3, 3->0, 4->0
+--------------------------------------------------------------------------------
+Motif #24
+Type: fork-join
+Nodes: 5
+Edges: 5
+Occurrences in this DAG: 9
+Representative edges: 1->4, 2->4, 3->1, 3->2, 4->0
+--------------------------------------------------------------------------------
+Motif #25
+Type: fork-join
+Nodes: 5
+Edges: 5
+Occurrences in this DAG: 9
+Representative edges: 1->4, 2->3, 3->0, 4->0, 4->3
+--------------------------------------------------------------------------------
+Motif #26
+Type: fork-join
+Nodes: 5
+Edges: 5
+Occurrences in this DAG: 9
+Representative edges: 1->4, 2->3, 2->4, 3->1, 4->0
+--------------------------------------------------------------------------------
+Motif #27
+Type: fork-join
+Nodes: 5
+Edges: 5
+Occurrences in this DAG: 8
+Representative edges: 1->4, 2->1, 3->1, 3->2, 4->0
+--------------------------------------------------------------------------------
+Motif #28
+Type: fan-in
+Nodes: 5
+Edges: 5
+Occurrences in this DAG: 8
+Representative edges: 1->4, 2->0, 3->0, 3->4, 4->0
+--------------------------------------------------------------------------------
+Motif #29
+Type: fork-join
+Nodes: 5
+Edges: 5
+Occurrences in this DAG: 7
+Representative edges: 2->3, 2->4, 3->1, 4->0, 4->3
+--------------------------------------------------------------------------------
+Motif #30
+Type: fork-join
+Nodes: 5
+Edges: 5
+Occurrences in this DAG: 7
+Representative edges: 2->1, 3->1, 3->4, 4->0, 4->2
+--------------------------------------------------------------------------------
+Motif #31
+Type: fork-join
+Nodes: 5
+Edges: 5
+Occurrences in this DAG: 7
+Representative edges: 1->4, 2->4, 3->0, 4->0, 4->3
+--------------------------------------------------------------------------------
+Motif #32
+Type: fork-join
+Nodes: 5
+Edges: 5
+Occurrences in this DAG: 7
+Representative edges: 1->4, 2->0, 3->0, 4->2, 4->3
+--------------------------------------------------------------------------------
+Motif #33
+Type: fan-in
+Nodes: 5
+Edges: 5
+Occurrences in this DAG: 7
+Representative edges: 1->3, 1->4, 2->0, 3->0, 4->0
+--------------------------------------------------------------------------------
+Motif #34
+Type: fan-in
+Nodes: 5
+Edges: 5
+Occurrences in this DAG: 7
+Representative edges: 1->0, 2->0, 3->0, 4->0, 4->3
+--------------------------------------------------------------------------------
+Motif #35
+Type: fork-join
+Nodes: 5
+Edges: 5
+Occurrences in this DAG: 6
+Representative edges: 2->4, 3->1, 3->2, 4->0, 4->1
+--------------------------------------------------------------------------------
+Motif #36
+Type: fork-join
+Nodes: 5
+Edges: 5
+Occurrences in this DAG: 6
+Representative edges: 2->4, 3->0, 3->1, 4->1, 4->3
+--------------------------------------------------------------------------------
+Motif #37
+Type: fork-join
+Nodes: 5
+Edges: 5
+Occurrences in this DAG: 6
+Representative edges: 2->1, 3->0, 3->2, 4->0, 4->1
+--------------------------------------------------------------------------------
+Motif #38
+Type: fan-in
+Nodes: 5
+Edges: 5
+Occurrences in this DAG: 6
+Representative edges: 1->4, 2->4, 3->2, 3->4, 4->0
+--------------------------------------------------------------------------------
+Motif #39
+Type: fork-join
+Nodes: 5
+Edges: 5
+Occurrences in this DAG: 5
+Representative edges: 2->4, 3->2, 3->4, 4->0, 4->1
+--------------------------------------------------------------------------------
+Motif #40
+Type: fan-in
+Nodes: 5
+Edges: 5
+Occurrences in this DAG: 5
+Representative edges: 2->1, 3->1, 3->4, 4->0, 4->1
+--------------------------------------------------------------------------------
+Motif #41
+Type: fork-join
+Nodes: 5
+Edges: 5
+Occurrences in this DAG: 5
+Representative edges: 2->1, 3->1, 3->2, 4->0, 4->2
+--------------------------------------------------------------------------------
+Motif #42
+Type: fan-in
+Nodes: 5
+Edges: 5
+Occurrences in this DAG: 5
+Representative edges: 1->4, 2->0, 3->0, 3->1, 4->0
+--------------------------------------------------------------------------------
+Motif #43
+Type: fan-out
+Nodes: 5
+Edges: 5
+Occurrences in this DAG: 4
+Representative edges: 3->1, 3->2, 4->0, 4->1, 4->2
+--------------------------------------------------------------------------------
+Motif #44
+Type: fork-join
+Nodes: 5
+Edges: 5
+Occurrences in this DAG: 4
+Representative edges: 2->1, 3->0, 3->4, 4->0, 4->1
+--------------------------------------------------------------------------------
+Motif #45
+Type: fork-join
+Nodes: 5
+Edges: 5
+Occurrences in this DAG: 3
+Representative edges: 2->4, 3->0, 3->1, 4->0, 4->1
+--------------------------------------------------------------------------------
+Motif #46
+Type: fan-out
+Nodes: 5
+Edges: 5
+Occurrences in this DAG: 3
+Representative edges: 2->1, 3->1, 4->0, 4->2, 4->3
+--------------------------------------------------------------------------------
+Motif #47
+Type: fork-join
+Nodes: 5
+Edges: 5
+Occurrences in this DAG: 3
+Representative edges: 2->1, 3->0, 3->4, 4->0, 4->2
+--------------------------------------------------------------------------------
+Motif #48
+Type: fork-join
+Nodes: 5
+Edges: 5
+Occurrences in this DAG: 3
+Representative edges: 2->1, 3->0, 3->2, 4->0, 4->2
+--------------------------------------------------------------------------------
+Motif #49
+Type: fork-join
+Nodes: 5
+Edges: 5
+Occurrences in this DAG: 3
+Representative edges: 1->4, 2->1, 3->0, 3->4, 4->0
+--------------------------------------------------------------------------------
+Motif #50
+Type: fan-out
+Nodes: 5
+Edges: 5
+Occurrences in this DAG: 2
+Representative edges: 2->4, 3->0, 3->1, 3->2, 4->1
+--------------------------------------------------------------------------------
+Motif #51
+Type: fan-out
+Nodes: 5
+Edges: 5
+Occurrences in this DAG: 2
+Representative edges: 2->1, 3->1, 3->2, 3->4, 4->0
+--------------------------------------------------------------------------------
+Motif #52
+Type: fan-out
+Nodes: 5
+Edges: 5
+Occurrences in this DAG: 2
+Representative edges: 2->1, 3->0, 4->0, 4->1, 4->3
+--------------------------------------------------------------------------------
+Motif #53
+Type: fan-out
+Nodes: 5
+Edges: 5
+Occurrences in this DAG: 1
+Representative edges: 3->2, 3->4, 4->0, 4->1, 4->2
+--------------------------------------------------------------------------------
+Motif #54
+Type: fan-out
+Nodes: 5
+Edges: 5
+Occurrences in this DAG: 1
+Representative edges: 3->1, 3->2, 4->0, 4->2, 4->3
+--------------------------------------------------------------------------------
+Motif #55
+Type: fan-out
+Nodes: 5
+Edges: 5
+Occurrences in this DAG: 1
+Representative edges: 2->4, 3->1, 4->0, 4->1, 4->3
+--------------------------------------------------------------------------------
+Motif #56
+Type: fan-out
+Nodes: 5
+Edges: 5
+Occurrences in this DAG: 1
+Representative edges: 2->4, 3->1, 3->2, 3->4, 4->0
+--------------------------------------------------------------------------------
+Motif #57
+Type: fork-join
+Nodes: 5
+Edges: 5
+Occurrences in this DAG: 1
+Representative edges: 2->1, 3->1, 4->0, 4->1, 4->3
+--------------------------------------------------------------------------------
+Motif #58
+Type: fan-in
+Nodes: 5
+Edges: 5
+Occurrences in this DAG: 1
+Representative edges: 1->4, 2->4, 3->0, 3->4, 4->0
+--------------------------------------------------------------------------------
+Motif #59
+Type: fork-join
+Nodes: 5
+Edges: 5
+Occurrences in this DAG: 1
+Representative edges: 1->4, 2->4, 3->0, 3->2, 4->0
+--------------------------------------------------------------------------------
+Motif #60
+Type: fork-join
+Nodes: 5
+Edges: 5
+Occurrences in this DAG: 1
+Representative edges: 1->4, 2->3, 2->4, 3->0, 4->3
+--------------------------------------------------------------------------------
+Motif #61
+Type: chain
+Nodes: 5
+Edges: 4
+Occurrences in this DAG: 269
+Representative edges: 1->4, 2->1, 3->0, 4->0
+--------------------------------------------------------------------------------
+Motif #62
+Type: chain
+Nodes: 5
+Edges: 4
+Occurrences in this DAG: 241
+Representative edges: 1->4, 2->3, 3->1, 4->0
+--------------------------------------------------------------------------------
+Motif #63
+Type: chain
+Nodes: 5
+Edges: 4
+Occurrences in this DAG: 221
+Representative edges: 2->4, 3->1, 3->2, 4->0
+--------------------------------------------------------------------------------
+Motif #64
+Type: chain
+Nodes: 5
+Edges: 4
+Occurrences in this DAG: 212
+Representative edges: 2->4, 3->0, 3->1, 4->1
+--------------------------------------------------------------------------------
+Motif #65
+Type: chain
+Nodes: 5
+Edges: 4
+Occurrences in this DAG: 202
+Representative edges: 2->1, 3->1, 4->0, 4->3
+--------------------------------------------------------------------------------
+Motif #66
+Type: chain
+Nodes: 5
+Edges: 4
+Occurrences in this DAG: 182
+Representative edges: 2->1, 3->1, 3->4, 4->0
+--------------------------------------------------------------------------------
+Motif #67
+Type: fork-join
+Nodes: 5
+Edges: 4
+Occurrences in this DAG: 172
+Representative edges: 2->4, 3->1, 4->0, 4->3
+--------------------------------------------------------------------------------
+Motif #68
+Type: fork-join
+Nodes: 5
+Edges: 4
+Occurrences in this DAG: 170
+Representative edges: 1->4, 2->4, 3->2, 4->0
+--------------------------------------------------------------------------------
+Motif #69
+Type: fan-in
+Nodes: 5
+Edges: 4
+Occurrences in this DAG: 169
+Representative edges: 1->4, 2->0, 3->0, 4->0
+--------------------------------------------------------------------------------
+Motif #70
+Type: fork-join
+Nodes: 5
+Edges: 4
+Occurrences in this DAG: 167
+Representative edges: 2->4, 3->1, 4->0, 4->1
+--------------------------------------------------------------------------------
+Motif #71
+Type: fork-join
+Nodes: 5
+Edges: 4
+Occurrences in this DAG: 146
+Representative edges: 2->4, 3->1, 3->4, 4->0
+--------------------------------------------------------------------------------
+Motif #72
+Type: chain
+Nodes: 5
+Edges: 4
+Occurrences in this DAG: 132
+Representative edges: 1->4, 2->3, 3->0, 4->0
+--------------------------------------------------------------------------------
+Motif #73
+Type: chain
+Nodes: 5
+Edges: 4
+Occurrences in this DAG: 102
+Representative edges: 2->1, 3->0, 4->0, 4->1
+--------------------------------------------------------------------------------
+Motif #74
+Type: chain
+Nodes: 5
+Edges: 4
+Occurrences in this DAG: 100
+Representative edges: 2->3, 2->4, 3->1, 4->0
+--------------------------------------------------------------------------------
+Motif #75
+Type: fan-in
+Nodes: 5
+Edges: 4
+Occurrences in this DAG: 93
+Representative edges: 2->1, 3->1, 4->0, 4->1
+--------------------------------------------------------------------------------
+Motif #76
+Type: fork-join
+Nodes: 5
+Edges: 4
+Occurrences in this DAG: 91
+Representative edges: 1->4, 2->4, 3->0, 4->0
+--------------------------------------------------------------------------------
+Motif #77
+Type: fork-join
+Nodes: 5
+Edges: 4
+Occurrences in this DAG: 89
+Representative edges: 1->4, 2->4, 3->0, 4->3
+--------------------------------------------------------------------------------
+Motif #78
+Type: fork-join
+Nodes: 5
+Edges: 4
+Occurrences in this DAG: 82
+Representative edges: 2->4, 3->2, 4->0, 4->1
+--------------------------------------------------------------------------------
+Motif #79
+Type: chain
+Nodes: 5
+Edges: 4
+Occurrences in this DAG: 80
+Representative edges: 3->1, 3->2, 4->0, 4->2
+--------------------------------------------------------------------------------
+Motif #80
+Type: fan-out
+Nodes: 5
+Edges: 4
+Occurrences in this DAG: 65
+Representative edges: 3->2, 4->0, 4->1, 4->2
+--------------------------------------------------------------------------------
+Motif #81
+Type: fan-out
+Nodes: 5
+Edges: 4
+Occurrences in this DAG: 64
+Representative edges: 3->2, 4->0, 4->1, 4->3
+--------------------------------------------------------------------------------
+Motif #82
+Type: fork-join
+Nodes: 5
+Edges: 4
+Occurrences in this DAG: 63
+Representative edges: 3->2, 3->4, 4->0, 4->1
+--------------------------------------------------------------------------------
+Motif #83
+Type: fan-in
+Nodes: 5
+Edges: 4
+Occurrences in this DAG: 21
+Representative edges: 1->4, 2->4, 3->4, 4->0
+--------------------------------------------------------------------------------
+Motif #84
+Type: fan-out
+Nodes: 5
+Edges: 4
+Occurrences in this DAG: 19
+Representative edges: 3->4, 4->0, 4->1, 4->2
+--------------------------------------------------------------------------------
+Motif #85
+Type: fork-join
+Nodes: 5
+Edges: 4
+Occurrences in this DAG: 18
+Representative edges: 2->4, 3->4, 4->0, 4->1
+--------------------------------------------------------------------------------
+Motif #86
+Type: fan-in
+Nodes: 5
+Edges: 4
+Occurrences in this DAG: 14
+Representative edges: 1->0, 2->0, 3->0, 4->0
+--------------------------------------------------------------------------------
+Motif #87
+Type: fan-out
+Nodes: 5
+Edges: 4
+Occurrences in this DAG: 2
+Representative edges: 4->0, 4->1, 4->2, 4->3
+--------------------------------------------------------------------------------
