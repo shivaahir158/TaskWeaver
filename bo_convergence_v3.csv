@@ -1,0 +1,361 @@
+Algorithm,Variant,Iteration,BestTrainMakespan
+GNN,Original Algo + BO,1,411.94029850746267
+GNN,Original Algo + BO,2,411.94029850746267
+GNN,Original Algo + BO,3,411.94029850746267
+GNN,Original Algo + BO,4,411.94029850746267
+GNN,Original Algo + BO,5,411.94029850746267
+GNN,Original Algo + BO,6,411.94029850746267
+GNN,Original Algo + BO,7,411.94029850746267
+GNN,Original Algo + BO,8,411.94029850746267
+GNN,Original Algo + BO,9,411.94029850746267
+GNN,Original Algo + BO,10,411.94029850746267
+GNN,Original Algo + BO,11,411.94029850746267
+GNN,Original Algo + BO,12,411.94029850746267
+GNN,Original Algo + BO,13,411.94029850746267
+GNN,Original Algo + BO,14,402.6119402985075
+GNN,Original Algo + BO,15,402.6119402985075
+GNN,Original Algo + Motifs + BO,1,415.53731343283584
+GNN,Original Algo + Motifs + BO,2,415.53731343283584
+GNN,Original Algo + Motifs + BO,3,415.53731343283584
+GNN,Original Algo + Motifs + BO,4,415.53731343283584
+GNN,Original Algo + Motifs + BO,5,415.53731343283584
+GNN,Original Algo + Motifs + BO,6,415.53731343283584
+GNN,Original Algo + Motifs + BO,7,415.53731343283584
+GNN,Original Algo + Motifs + BO,8,415.2835820895522
+GNN,Original Algo + Motifs + BO,9,415.2835820895522
+GNN,Original Algo + Motifs + BO,10,415.2835820895522
+GNN,Original Algo + Motifs + BO,11,415.2835820895522
+GNN,Original Algo + Motifs + BO,12,415.2835820895522
+GNN,Original Algo + Motifs + BO,13,415.2835820895522
+GNN,Original Algo + Motifs + BO,14,415.2835820895522
+GNN,Original Algo + Motifs + BO,15,403.8358208955224
+GNN,Original Algo + Configs + BO (LLM for Weight Generation),1,430.55223880597015
+GNN,Original Algo + Configs + BO (LLM for Weight Generation),2,414.56716417910445
+GNN,Original Algo + Configs + BO (LLM for Weight Generation),3,414.56716417910445
+GNN,Original Algo + Configs + BO (LLM for Weight Generation),4,414.56716417910445
+GNN,Original Algo + Configs + BO (LLM for Weight Generation),5,414.56716417910445
+GNN,Original Algo + Configs + BO (LLM for Weight Generation),6,414.56716417910445
+GNN,Original Algo + Configs + BO (LLM for Weight Generation),7,414.56716417910445
+GNN,Original Algo + Configs + BO (LLM for Weight Generation),8,414.56716417910445
+GNN,Original Algo + Configs + BO (LLM for Weight Generation),9,414.56716417910445
+GNN,Original Algo + Configs + BO (LLM for Weight Generation),10,413.82089552238807
+GNN,Original Algo + Configs + BO (LLM for Weight Generation),11,413.82089552238807
+GNN,Original Algo + Configs + BO (LLM for Weight Generation),12,405.76119402985074
+GNN,Original Algo + Configs + BO (LLM for Weight Generation),13,405.76119402985074
+GNN,Original Algo + Configs + BO (LLM for Weight Generation),14,405.76119402985074
+GNN,Original Algo + Configs + BO (LLM for Weight Generation),15,403.3731343283582
+Greedy-EFT,Original Algo + BO,1,439.2686567164179
+Greedy-EFT,Original Algo + BO,2,435.089552238806
+Greedy-EFT,Original Algo + BO,3,435.089552238806
+Greedy-EFT,Original Algo + BO,4,419.56716417910445
+Greedy-EFT,Original Algo + BO,5,419.56716417910445
+Greedy-EFT,Original Algo + BO,6,419.56716417910445
+Greedy-EFT,Original Algo + BO,7,419.56716417910445
+Greedy-EFT,Original Algo + BO,8,413.23880597014926
+Greedy-EFT,Original Algo + BO,9,413.23880597014926
+Greedy-EFT,Original Algo + BO,10,413.23880597014926
+Greedy-EFT,Original Algo + BO,11,413.23880597014926
+Greedy-EFT,Original Algo + BO,12,413.23880597014926
+Greedy-EFT,Original Algo + BO,13,413.23880597014926
+Greedy-EFT,Original Algo + BO,14,413.23880597014926
+Greedy-EFT,Original Algo + BO,15,404.76119402985074
+Greedy-EFT,Original Algo + Motifs + BO,1,440.8059701492537
+Greedy-EFT,Original Algo + Motifs + BO,2,436.1044776119403
+Greedy-EFT,Original Algo + Motifs + BO,3,436.1044776119403
+Greedy-EFT,Original Algo + Motifs + BO,4,421.64179104477614
+Greedy-EFT,Original Algo + Motifs + BO,5,421.64179104477614
+Greedy-EFT,Original Algo + Motifs + BO,6,421.64179104477614
+Greedy-EFT,Original Algo + Motifs + BO,7,421.64179104477614
+Greedy-EFT,Original Algo + Motifs + BO,8,415.2835820895522
+Greedy-EFT,Original Algo + Motifs + BO,9,415.2835820895522
+Greedy-EFT,Original Algo + Motifs + BO,10,415.2835820895522
+Greedy-EFT,Original Algo + Motifs + BO,11,415.2835820895522
+Greedy-EFT,Original Algo + Motifs + BO,12,410.67164179104475
+Greedy-EFT,Original Algo + Motifs + BO,13,410.67164179104475
+Greedy-EFT,Original Algo + Motifs + BO,14,410.67164179104475
+Greedy-EFT,Original Algo + Motifs + BO,15,410.67164179104475
+Greedy-EFT,Original Algo + Configs + BO (LLM for Weight Generation),1,426.95522388059703
+Greedy-EFT,Original Algo + Configs + BO (LLM for Weight Generation),2,414.56716417910445
+Greedy-EFT,Original Algo + Configs + BO (LLM for Weight Generation),3,414.56716417910445
+Greedy-EFT,Original Algo + Configs + BO (LLM for Weight Generation),4,414.56716417910445
+Greedy-EFT,Original Algo + Configs + BO (LLM for Weight Generation),5,414.56716417910445
+Greedy-EFT,Original Algo + Configs + BO (LLM for Weight Generation),6,414.56716417910445
+Greedy-EFT,Original Algo + Configs + BO (LLM for Weight Generation),7,414.56716417910445
+Greedy-EFT,Original Algo + Configs + BO (LLM for Weight Generation),8,414.56716417910445
+Greedy-EFT,Original Algo + Configs + BO (LLM for Weight Generation),9,414.56716417910445
+Greedy-EFT,Original Algo + Configs + BO (LLM for Weight Generation),10,413.82089552238807
+Greedy-EFT,Original Algo + Configs + BO (LLM for Weight Generation),11,413.82089552238807
+Greedy-EFT,Original Algo + Configs + BO (LLM for Weight Generation),12,413.82089552238807
+Greedy-EFT,Original Algo + Configs + BO (LLM for Weight Generation),13,413.82089552238807
+Greedy-EFT,Original Algo + Configs + BO (LLM for Weight Generation),14,407.55223880597015
+Greedy-EFT,Original Algo + Configs + BO (LLM for Weight Generation),15,402.1940298507463
+HEFT,Original Algo + BO,1,404.8955223880597
+HEFT,Original Algo + BO,2,404.8955223880597
+HEFT,Original Algo + BO,3,404.8955223880597
+HEFT,Original Algo + BO,4,404.8955223880597
+HEFT,Original Algo + BO,5,404.8955223880597
+HEFT,Original Algo + BO,6,404.8955223880597
+HEFT,Original Algo + BO,7,404.8955223880597
+HEFT,Original Algo + BO,8,404.8955223880597
+HEFT,Original Algo + BO,9,404.8955223880597
+HEFT,Original Algo + BO,10,404.8955223880597
+HEFT,Original Algo + BO,11,404.8955223880597
+HEFT,Original Algo + BO,12,404.8955223880597
+HEFT,Original Algo + BO,13,404.8955223880597
+HEFT,Original Algo + BO,14,404.8955223880597
+HEFT,Original Algo + BO,15,404.8955223880597
+HEFT,Original Algo + Motifs + BO,1,415.0
+HEFT,Original Algo + Motifs + BO,2,415.0
+HEFT,Original Algo + Motifs + BO,3,415.0
+HEFT,Original Algo + Motifs + BO,4,415.0
+HEFT,Original Algo + Motifs + BO,5,415.0
+HEFT,Original Algo + Motifs + BO,6,415.0
+HEFT,Original Algo + Motifs + BO,7,415.0
+HEFT,Original Algo + Motifs + BO,8,415.0
+HEFT,Original Algo + Motifs + BO,9,415.0
+HEFT,Original Algo + Motifs + BO,10,415.0
+HEFT,Original Algo + Motifs + BO,11,415.0
+HEFT,Original Algo + Motifs + BO,12,403.17910447761193
+HEFT,Original Algo + Motifs + BO,13,403.17910447761193
+HEFT,Original Algo + Motifs + BO,14,403.17910447761193
+HEFT,Original Algo + Motifs + BO,15,403.17910447761193
+HEFT,Original Algo + Configs + BO (LLM for Weight Generation),1,430.55223880597015
+HEFT,Original Algo + Configs + BO (LLM for Weight Generation),2,414.56716417910445
+HEFT,Original Algo + Configs + BO (LLM for Weight Generation),3,414.56716417910445
+HEFT,Original Algo + Configs + BO (LLM for Weight Generation),4,414.56716417910445
+HEFT,Original Algo + Configs + BO (LLM for Weight Generation),5,414.56716417910445
+HEFT,Original Algo + Configs + BO (LLM for Weight Generation),6,414.56716417910445
+HEFT,Original Algo + Configs + BO (LLM for Weight Generation),7,414.56716417910445
+HEFT,Original Algo + Configs + BO (LLM for Weight Generation),8,414.56716417910445
+HEFT,Original Algo + Configs + BO (LLM for Weight Generation),9,414.56716417910445
+HEFT,Original Algo + Configs + BO (LLM for Weight Generation),10,413.82089552238807
+HEFT,Original Algo + Configs + BO (LLM for Weight Generation),11,413.82089552238807
+HEFT,Original Algo + Configs + BO (LLM for Weight Generation),12,405.76119402985074
+HEFT,Original Algo + Configs + BO (LLM for Weight Generation),13,405.76119402985074
+HEFT,Original Algo + Configs + BO (LLM for Weight Generation),14,405.76119402985074
+HEFT,Original Algo + Configs + BO (LLM for Weight Generation),15,403.3731343283582
+HOFT,Original Algo + BO,1,412.8955223880597
+HOFT,Original Algo + BO,2,412.8955223880597
+HOFT,Original Algo + BO,3,412.8955223880597
+HOFT,Original Algo + BO,4,412.8955223880597
+HOFT,Original Algo + BO,5,412.8955223880597
+HOFT,Original Algo + BO,6,412.8955223880597
+HOFT,Original Algo + BO,7,412.8955223880597
+HOFT,Original Algo + BO,8,412.8955223880597
+HOFT,Original Algo + BO,9,412.8955223880597
+HOFT,Original Algo + BO,10,412.8955223880597
+HOFT,Original Algo + BO,11,412.8955223880597
+HOFT,Original Algo + BO,12,404.4179104477612
+HOFT,Original Algo + BO,13,404.4179104477612
+HOFT,Original Algo + BO,14,404.4179104477612
+HOFT,Original Algo + BO,15,404.4179104477612
+HOFT,Original Algo + Motifs + BO,1,416.910447761194
+HOFT,Original Algo + Motifs + BO,2,416.910447761194
+HOFT,Original Algo + Motifs + BO,3,416.910447761194
+HOFT,Original Algo + Motifs + BO,4,416.910447761194
+HOFT,Original Algo + Motifs + BO,5,416.910447761194
+HOFT,Original Algo + Motifs + BO,6,416.910447761194
+HOFT,Original Algo + Motifs + BO,7,416.910447761194
+HOFT,Original Algo + Motifs + BO,8,415.2835820895522
+HOFT,Original Algo + Motifs + BO,9,415.2835820895522
+HOFT,Original Algo + Motifs + BO,10,415.2835820895522
+HOFT,Original Algo + Motifs + BO,11,415.2835820895522
+HOFT,Original Algo + Motifs + BO,12,415.2835820895522
+HOFT,Original Algo + Motifs + BO,13,415.2835820895522
+HOFT,Original Algo + Motifs + BO,14,415.2835820895522
+HOFT,Original Algo + Motifs + BO,15,408.1641791044776
+HOFT,Original Algo + Configs + BO (LLM for Weight Generation),1,430.65671641791045
+HOFT,Original Algo + Configs + BO (LLM for Weight Generation),2,414.56716417910445
+HOFT,Original Algo + Configs + BO (LLM for Weight Generation),3,414.56716417910445
+HOFT,Original Algo + Configs + BO (LLM for Weight Generation),4,414.56716417910445
+HOFT,Original Algo + Configs + BO (LLM for Weight Generation),5,414.56716417910445
+HOFT,Original Algo + Configs + BO (LLM for Weight Generation),6,414.56716417910445
+HOFT,Original Algo + Configs + BO (LLM for Weight Generation),7,414.56716417910445
+HOFT,Original Algo + Configs + BO (LLM for Weight Generation),8,414.56716417910445
+HOFT,Original Algo + Configs + BO (LLM for Weight Generation),9,414.56716417910445
+HOFT,Original Algo + Configs + BO (LLM for Weight Generation),10,413.82089552238807
+HOFT,Original Algo + Configs + BO (LLM for Weight Generation),11,413.82089552238807
+HOFT,Original Algo + Configs + BO (LLM for Weight Generation),12,413.82089552238807
+HOFT,Original Algo + Configs + BO (LLM for Weight Generation),13,413.82089552238807
+HOFT,Original Algo + Configs + BO (LLM for Weight Generation),14,413.82089552238807
+HOFT,Original Algo + Configs + BO (LLM for Weight Generation),15,413.82089552238807
+CPOP,Original Algo + BO,1,424.34328358208955
+CPOP,Original Algo + BO,2,424.34328358208955
+CPOP,Original Algo + BO,3,424.34328358208955
+CPOP,Original Algo + BO,4,419.56716417910445
+CPOP,Original Algo + BO,5,419.56716417910445
+CPOP,Original Algo + BO,6,419.56716417910445
+CPOP,Original Algo + BO,7,419.56716417910445
+CPOP,Original Algo + BO,8,413.23880597014926
+CPOP,Original Algo + BO,9,413.23880597014926
+CPOP,Original Algo + BO,10,413.23880597014926
+CPOP,Original Algo + BO,11,413.23880597014926
+CPOP,Original Algo + BO,12,401.3134328358209
+CPOP,Original Algo + BO,13,401.3134328358209
+CPOP,Original Algo + BO,14,401.3134328358209
+CPOP,Original Algo + BO,15,401.3134328358209
+CPOP,Original Algo + Motifs + BO,1,419.4029850746269
+CPOP,Original Algo + Motifs + BO,2,419.4029850746269
+CPOP,Original Algo + Motifs + BO,3,419.4029850746269
+CPOP,Original Algo + Motifs + BO,4,419.4029850746269
+CPOP,Original Algo + Motifs + BO,5,419.4029850746269
+CPOP,Original Algo + Motifs + BO,6,419.4029850746269
+CPOP,Original Algo + Motifs + BO,7,419.4029850746269
+CPOP,Original Algo + Motifs + BO,8,415.2835820895522
+CPOP,Original Algo + Motifs + BO,9,415.2835820895522
+CPOP,Original Algo + Motifs + BO,10,415.2835820895522
+CPOP,Original Algo + Motifs + BO,11,415.2835820895522
+CPOP,Original Algo + Motifs + BO,12,415.2835820895522
+CPOP,Original Algo + Motifs + BO,13,415.2835820895522
+CPOP,Original Algo + Motifs + BO,14,413.53731343283584
+CPOP,Original Algo + Motifs + BO,15,411.64179104477614
+CPOP,Original Algo + Configs + BO (LLM for Weight Generation),1,430.55223880597015
+CPOP,Original Algo + Configs + BO (LLM for Weight Generation),2,414.56716417910445
+CPOP,Original Algo + Configs + BO (LLM for Weight Generation),3,414.56716417910445
+CPOP,Original Algo + Configs + BO (LLM for Weight Generation),4,414.56716417910445
+CPOP,Original Algo + Configs + BO (LLM for Weight Generation),5,414.56716417910445
+CPOP,Original Algo + Configs + BO (LLM for Weight Generation),6,414.56716417910445
+CPOP,Original Algo + Configs + BO (LLM for Weight Generation),7,414.56716417910445
+CPOP,Original Algo + Configs + BO (LLM for Weight Generation),8,414.56716417910445
+CPOP,Original Algo + Configs + BO (LLM for Weight Generation),9,414.56716417910445
+CPOP,Original Algo + Configs + BO (LLM for Weight Generation),10,413.82089552238807
+CPOP,Original Algo + Configs + BO (LLM for Weight Generation),11,413.82089552238807
+CPOP,Original Algo + Configs + BO (LLM for Weight Generation),12,405.76119402985074
+CPOP,Original Algo + Configs + BO (LLM for Weight Generation),13,405.76119402985074
+CPOP,Original Algo + Configs + BO (LLM for Weight Generation),14,405.76119402985074
+CPOP,Original Algo + Configs + BO (LLM for Weight Generation),15,403.3731343283582
+PEFT,Original Algo + BO,1,414.04477611940297
+PEFT,Original Algo + BO,2,414.04477611940297
+PEFT,Original Algo + BO,3,414.04477611940297
+PEFT,Original Algo + BO,4,414.04477611940297
+PEFT,Original Algo + BO,5,414.04477611940297
+PEFT,Original Algo + BO,6,414.04477611940297
+PEFT,Original Algo + BO,7,414.04477611940297
+PEFT,Original Algo + BO,8,413.23880597014926
+PEFT,Original Algo + BO,9,413.23880597014926
+PEFT,Original Algo + BO,10,413.23880597014926
+PEFT,Original Algo + BO,11,413.23880597014926
+PEFT,Original Algo + BO,12,413.23880597014926
+PEFT,Original Algo + BO,13,402.6268656716418
+PEFT,Original Algo + BO,14,402.6268656716418
+PEFT,Original Algo + BO,15,402.6268656716418
+PEFT,Original Algo + Motifs + BO,1,415.5820895522388
+PEFT,Original Algo + Motifs + BO,2,415.5820895522388
+PEFT,Original Algo + Motifs + BO,3,415.5820895522388
+PEFT,Original Algo + Motifs + BO,4,415.5820895522388
+PEFT,Original Algo + Motifs + BO,5,415.5820895522388
+PEFT,Original Algo + Motifs + BO,6,415.5820895522388
+PEFT,Original Algo + Motifs + BO,7,415.5820895522388
+PEFT,Original Algo + Motifs + BO,8,415.2835820895522
+PEFT,Original Algo + Motifs + BO,9,415.2835820895522
+PEFT,Original Algo + Motifs + BO,10,415.2835820895522
+PEFT,Original Algo + Motifs + BO,11,415.2835820895522
+PEFT,Original Algo + Motifs + BO,12,415.2835820895522
+PEFT,Original Algo + Motifs + BO,13,415.2835820895522
+PEFT,Original Algo + Motifs + BO,14,415.2835820895522
+PEFT,Original Algo + Motifs + BO,15,404.02985074626866
+PEFT,Original Algo + Configs + BO (LLM for Weight Generation),1,430.55223880597015
+PEFT,Original Algo + Configs + BO (LLM for Weight Generation),2,414.56716417910445
+PEFT,Original Algo + Configs + BO (LLM for Weight Generation),3,414.56716417910445
+PEFT,Original Algo + Configs + BO (LLM for Weight Generation),4,414.56716417910445
+PEFT,Original Algo + Configs + BO (LLM for Weight Generation),5,414.56716417910445
+PEFT,Original Algo + Configs + BO (LLM for Weight Generation),6,414.56716417910445
+PEFT,Original Algo + Configs + BO (LLM for Weight Generation),7,414.56716417910445
+PEFT,Original Algo + Configs + BO (LLM for Weight Generation),8,414.56716417910445
+PEFT,Original Algo + Configs + BO (LLM for Weight Generation),9,414.56716417910445
+PEFT,Original Algo + Configs + BO (LLM for Weight Generation),10,413.82089552238807
+PEFT,Original Algo + Configs + BO (LLM for Weight Generation),11,413.82089552238807
+PEFT,Original Algo + Configs + BO (LLM for Weight Generation),12,405.76119402985074
+PEFT,Original Algo + Configs + BO (LLM for Weight Generation),13,405.76119402985074
+PEFT,Original Algo + Configs + BO (LLM for Weight Generation),14,405.76119402985074
+PEFT,Original Algo + Configs + BO (LLM for Weight Generation),15,403.3731343283582
+Decima,Original Algo + BO,1,416.2686567164179
+Decima,Original Algo + BO,2,416.2686567164179
+Decima,Original Algo + BO,3,416.2686567164179
+Decima,Original Algo + BO,4,416.2686567164179
+Decima,Original Algo + BO,5,416.2686567164179
+Decima,Original Algo + BO,6,416.2686567164179
+Decima,Original Algo + BO,7,416.2686567164179
+Decima,Original Algo + BO,8,413.23880597014926
+Decima,Original Algo + BO,9,413.23880597014926
+Decima,Original Algo + BO,10,413.23880597014926
+Decima,Original Algo + BO,11,413.23880597014926
+Decima,Original Algo + BO,12,401.8358208955224
+Decima,Original Algo + BO,13,401.8358208955224
+Decima,Original Algo + BO,14,401.8358208955224
+Decima,Original Algo + BO,15,401.8358208955224
+Decima,Original Algo + Motifs + BO,1,418.8059701492537
+Decima,Original Algo + Motifs + BO,2,418.8059701492537
+Decima,Original Algo + Motifs + BO,3,418.8059701492537
+Decima,Original Algo + Motifs + BO,4,418.8059701492537
+Decima,Original Algo + Motifs + BO,5,418.8059701492537
+Decima,Original Algo + Motifs + BO,6,418.8059701492537
+Decima,Original Algo + Motifs + BO,7,418.8059701492537
+Decima,Original Algo + Motifs + BO,8,415.2835820895522
+Decima,Original Algo + Motifs + BO,9,415.2835820895522
+Decima,Original Algo + Motifs + BO,10,415.2835820895522
+Decima,Original Algo + Motifs + BO,11,415.2835820895522
+Decima,Original Algo + Motifs + BO,12,412.2835820895522
+Decima,Original Algo + Motifs + BO,13,412.2835820895522
+Decima,Original Algo + Motifs + BO,14,412.2835820895522
+Decima,Original Algo + Motifs + BO,15,412.2835820895522
+Decima,Original Algo + Configs + BO (LLM for Weight Generation),1,430.55223880597015
+Decima,Original Algo + Configs + BO (LLM for Weight Generation),2,414.56716417910445
+Decima,Original Algo + Configs + BO (LLM for Weight Generation),3,414.56716417910445
+Decima,Original Algo + Configs + BO (LLM for Weight Generation),4,414.56716417910445
+Decima,Original Algo + Configs + BO (LLM for Weight Generation),5,414.56716417910445
+Decima,Original Algo + Configs + BO (LLM for Weight Generation),6,414.56716417910445
+Decima,Original Algo + Configs + BO (LLM for Weight Generation),7,414.56716417910445
+Decima,Original Algo + Configs + BO (LLM for Weight Generation),8,414.56716417910445
+Decima,Original Algo + Configs + BO (LLM for Weight Generation),9,414.56716417910445
+Decima,Original Algo + Configs + BO (LLM for Weight Generation),10,413.82089552238807
+Decima,Original Algo + Configs + BO (LLM for Weight Generation),11,413.82089552238807
+Decima,Original Algo + Configs + BO (LLM for Weight Generation),12,405.76119402985074
+Decima,Original Algo + Configs + BO (LLM for Weight Generation),13,405.76119402985074
+Decima,Original Algo + Configs + BO (LLM for Weight Generation),14,405.76119402985074
+Decima,Original Algo + Configs + BO (LLM for Weight Generation),15,403.3731343283582
+LLM,Original Algo + BO,1,413.2238805970149
+LLM,Original Algo + BO,2,413.2238805970149
+LLM,Original Algo + BO,3,413.2238805970149
+LLM,Original Algo + BO,4,413.2238805970149
+LLM,Original Algo + BO,5,413.2238805970149
+LLM,Original Algo + BO,6,413.2238805970149
+LLM,Original Algo + BO,7,413.2238805970149
+LLM,Original Algo + BO,8,413.2238805970149
+LLM,Original Algo + BO,9,413.2238805970149
+LLM,Original Algo + BO,10,413.2238805970149
+LLM,Original Algo + BO,11,413.2238805970149
+LLM,Original Algo + BO,12,403.5074626865672
+LLM,Original Algo + BO,13,403.5074626865672
+LLM,Original Algo + BO,14,403.5074626865672
+LLM,Original Algo + BO,15,403.5074626865672
+LLM,Original Algo + Motifs + BO,1,416.7761194029851
+LLM,Original Algo + Motifs + BO,2,416.7761194029851
+LLM,Original Algo + Motifs + BO,3,416.7761194029851
+LLM,Original Algo + Motifs + BO,4,416.7761194029851
+LLM,Original Algo + Motifs + BO,5,416.7761194029851
+LLM,Original Algo + Motifs + BO,6,416.7761194029851
+LLM,Original Algo + Motifs + BO,7,416.7761194029851
+LLM,Original Algo + Motifs + BO,8,415.2835820895522
+LLM,Original Algo + Motifs + BO,9,415.2835820895522
+LLM,Original Algo + Motifs + BO,10,415.2835820895522
+LLM,Original Algo + Motifs + BO,11,415.2835820895522
+LLM,Original Algo + Motifs + BO,12,415.2835820895522
+LLM,Original Algo + Motifs + BO,13,415.2835820895522
+LLM,Original Algo + Motifs + BO,14,415.2835820895522
+LLM,Original Algo + Motifs + BO,15,405.7761194029851
+LLM,Original Algo + Configs + BO (LLM for Weight Generation),1,427.6268656716418
+LLM,Original Algo + Configs + BO (LLM for Weight Generation),2,414.56716417910445
+LLM,Original Algo + Configs + BO (LLM for Weight Generation),3,414.56716417910445
+LLM,Original Algo + Configs + BO (LLM for Weight Generation),4,414.56716417910445
+LLM,Original Algo + Configs + BO (LLM for Weight Generation),5,414.56716417910445
+LLM,Original Algo + Configs + BO (LLM for Weight Generation),6,414.56716417910445
+LLM,Original Algo + Configs + BO (LLM for Weight Generation),7,414.56716417910445
+LLM,Original Algo + Configs + BO (LLM for Weight Generation),8,414.56716417910445
+LLM,Original Algo + Configs + BO (LLM for Weight Generation),9,414.56716417910445
+LLM,Original Algo + Configs + BO (LLM for Weight Generation),10,413.82089552238807
+LLM,Original Algo + Configs + BO (LLM for Weight Generation),11,413.82089552238807
+LLM,Original Algo + Configs + BO (LLM for Weight Generation),12,409.07462686567163
+LLM,Original Algo + Configs + BO (LLM for Weight Generation),13,409.07462686567163
+LLM,Original Algo + Configs + BO (LLM for Weight Generation),14,409.07462686567163
+LLM,Original Algo + Configs + BO (LLM for Weight Generation),15,409.07462686567163

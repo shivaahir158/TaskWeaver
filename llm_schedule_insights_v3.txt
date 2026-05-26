@@ -1,0 +1,25 @@
+### Results Analysis
+
+#### 1. Why the Best Method Wins
+The best-performing method, PEFT with the "Original Algo + BO" variant, achieves a makespan of 351.24, outperforming all other configurations across various algorithms. This success can be attributed to its effective integration of Bayesian Optimization (BO), which systematically explores the solution space to identify optimal scheduling configurations, thereby minimizing execution time.
+
+#### 2. How Motif Features Help
+Motif features enhance scheduling by capturing recurring patterns within the Directed Acyclic Graph (DAG) structure. These features provide critical insights into the dependencies and interactions between tasks, allowing the scheduling algorithm to prioritize execution paths that minimize idle time and resource contention. The consistent performance improvement observed with motif integration across various algorithms underscores their significance in optimizing makespan.
+
+#### 3. How Bayesian Optimization Helps
+Bayesian Optimization (BO) is instrumental in refining the scheduling process by leveraging probabilistic models to guide the search for optimal configurations. It balances exploration and exploitation, enabling the algorithm to efficiently navigate the solution space. The results indicate that BO consistently yields lower makespan values, suggesting that it effectively identifies configurations that traditional methods may overlook.
+
+#### 4. How LLM-Generated Weight Initialization Helps
+The use of Large Language Model (LLM)-generated weight initialization provides a robust starting point for the optimization process. By leveraging learned patterns from extensive datasets, LLMs can suggest initial weights that are more aligned with optimal scheduling strategies. This preconditioning reduces the search space and accelerates convergence towards efficient scheduling solutions, as evidenced by the improved performance in configurations utilizing LLM-generated weights.
+
+#### 5. Important Feature Groups
+The analysis suggests that several feature groups are likely critical for effective scheduling: upward_rank, downward_rank, depth, fanout, indegree, avg_comm_out, avg_cost, and motif_score. These features collectively inform the algorithm about task dependencies, resource utilization, and communication costs, which are essential for minimizing makespan in complex DAGs.
+
+#### 6. Implications for HLS/EDA Scheduling
+The findings highlight the importance of integrating advanced features and optimization techniques in High-Level Synthesis (HLS) and Electronic Design Automation (EDA) scheduling. The ability to leverage motif features and Bayesian Optimization can lead to significant improvements in scheduling efficiency, ultimately enhancing the performance of hardware designs and reducing time-to-market.
+
+#### 7. Pipelining, Register/FIFO Insertion, and PPA Implications
+The optimization strategies discussed have direct implications for pipelining and register/FIFO insertion. By minimizing makespan, these methods can facilitate more effective resource allocation and timing closure, leading to improved Power, Performance, and Area (PPA) metrics. Efficient scheduling allows for better utilization of hardware resources, potentially enabling higher throughput and lower power consumption in synthesized designs.
+
+#### 8. Limitations
+While the benchmark-shaped DAGs used in this analysis provide valuable insights into scheduling performance, they do not directly replicate the complexities of real-world workloads such as those found in PolyBench or MachSuite. The synthetic nature of these benchmarks may limit the generalizability of the results, necessitating further validation against more diverse and realistic task graphs to fully understand the efficacy of the proposed methods in practical scenarios.

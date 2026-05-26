@@ -1,0 +1,481 @@
+Algorithm,Variant,Family,Makespan
+GNN,Original Algo,SPARSE_SPMV,402.2
+GNN,Original Algo,FFT,250.0
+GNN,Original Algo,ER,250.0
+GNN,Original Algo,STENCIL,246.5
+GNN,Original Algo,MOTIF_JOIN,513.0
+GNN,Original Algo,WS,805.5
+GNN,Original Algo,LU,449.0
+GNN,Original Algo,CNN_LIKE,431.0
+GNN,Original Algo,BA,301.0
+GNN,Original Algo,GEMM,490.0
+GNN,Original Algo,CHOLESKY,243.0
+GNN,Original Algo,AES_LIKE,365.0
+GNN,Original Algo + Motifs,SPARSE_SPMV,407.8
+GNN,Original Algo + Motifs,FFT,262.0
+GNN,Original Algo + Motifs,ER,261.5
+GNN,Original Algo + Motifs,STENCIL,261.25
+GNN,Original Algo + Motifs,MOTIF_JOIN,513.0
+GNN,Original Algo + Motifs,WS,805.5
+GNN,Original Algo + Motifs,LU,451.5
+GNN,Original Algo + Motifs,CNN_LIKE,431.0
+GNN,Original Algo + Motifs,BA,303.25
+GNN,Original Algo + Motifs,GEMM,497.0
+GNN,Original Algo + Motifs,CHOLESKY,241.0
+GNN,Original Algo + Motifs,AES_LIKE,364.0
+GNN,Original Algo + BO,SPARSE_SPMV,399.2
+GNN,Original Algo + BO,FFT,223.67
+GNN,Original Algo + BO,ER,240.0
+GNN,Original Algo + BO,STENCIL,215.5
+GNN,Original Algo + BO,MOTIF_JOIN,510.0
+GNN,Original Algo + BO,WS,803.5
+GNN,Original Algo + BO,LU,423.0
+GNN,Original Algo + BO,CNN_LIKE,427.0
+GNN,Original Algo + BO,BA,313.0
+GNN,Original Algo + BO,GEMM,488.0
+GNN,Original Algo + BO,CHOLESKY,245.0
+GNN,Original Algo + BO,AES_LIKE,368.0
+GNN,Original Algo + Motifs + BO,SPARSE_SPMV,400.8
+GNN,Original Algo + Motifs + BO,FFT,230.33
+GNN,Original Algo + Motifs + BO,ER,243.25
+GNN,Original Algo + Motifs + BO,STENCIL,223.75
+GNN,Original Algo + Motifs + BO,MOTIF_JOIN,512.0
+GNN,Original Algo + Motifs + BO,WS,805.0
+GNN,Original Algo + Motifs + BO,LU,424.0
+GNN,Original Algo + Motifs + BO,CNN_LIKE,427.0
+GNN,Original Algo + Motifs + BO,BA,306.25
+GNN,Original Algo + Motifs + BO,GEMM,489.0
+GNN,Original Algo + Motifs + BO,CHOLESKY,236.0
+GNN,Original Algo + Motifs + BO,AES_LIKE,368.0
+GNN,Original Algo + Configs + BO (LLM for Weight Generation),SPARSE_SPMV,399.4
+GNN,Original Algo + Configs + BO (LLM for Weight Generation),FFT,223.33
+GNN,Original Algo + Configs + BO (LLM for Weight Generation),ER,240.5
+GNN,Original Algo + Configs + BO (LLM for Weight Generation),STENCIL,216.0
+GNN,Original Algo + Configs + BO (LLM for Weight Generation),MOTIF_JOIN,512.0
+GNN,Original Algo + Configs + BO (LLM for Weight Generation),WS,807.0
+GNN,Original Algo + Configs + BO (LLM for Weight Generation),LU,423.0
+GNN,Original Algo + Configs + BO (LLM for Weight Generation),CNN_LIKE,427.0
+GNN,Original Algo + Configs + BO (LLM for Weight Generation),BA,306.5
+GNN,Original Algo + Configs + BO (LLM for Weight Generation),GEMM,489.0
+GNN,Original Algo + Configs + BO (LLM for Weight Generation),CHOLESKY,243.0
+GNN,Original Algo + Configs + BO (LLM for Weight Generation),AES_LIKE,372.0
+Greedy-EFT,Original Algo,SPARSE_SPMV,410.8
+Greedy-EFT,Original Algo,FFT,281.0
+Greedy-EFT,Original Algo,ER,289.75
+Greedy-EFT,Original Algo,STENCIL,266.25
+Greedy-EFT,Original Algo,MOTIF_JOIN,544.0
+Greedy-EFT,Original Algo,WS,806.5
+Greedy-EFT,Original Algo,LU,493.0
+Greedy-EFT,Original Algo,CNN_LIKE,433.0
+Greedy-EFT,Original Algo,BA,360.25
+Greedy-EFT,Original Algo,GEMM,498.0
+Greedy-EFT,Original Algo,CHOLESKY,293.0
+Greedy-EFT,Original Algo,AES_LIKE,357.0
+Greedy-EFT,Original Algo + Motifs,SPARSE_SPMV,413.4
+Greedy-EFT,Original Algo + Motifs,FFT,276.0
+Greedy-EFT,Original Algo + Motifs,ER,286.75
+Greedy-EFT,Original Algo + Motifs,STENCIL,276.75
+Greedy-EFT,Original Algo + Motifs,MOTIF_JOIN,544.0
+Greedy-EFT,Original Algo + Motifs,WS,801.5
+Greedy-EFT,Original Algo + Motifs,LU,493.0
+Greedy-EFT,Original Algo + Motifs,CNN_LIKE,433.0
+Greedy-EFT,Original Algo + Motifs,BA,333.75
+Greedy-EFT,Original Algo + Motifs,GEMM,498.0
+Greedy-EFT,Original Algo + Motifs,CHOLESKY,268.0
+Greedy-EFT,Original Algo + Motifs,AES_LIKE,397.0
+Greedy-EFT,Original Algo + BO,SPARSE_SPMV,400.8
+Greedy-EFT,Original Algo + BO,FFT,223.0
+Greedy-EFT,Original Algo + BO,ER,239.75
+Greedy-EFT,Original Algo + BO,STENCIL,215.75
+Greedy-EFT,Original Algo + BO,MOTIF_JOIN,513.0
+Greedy-EFT,Original Algo + BO,WS,807.0
+Greedy-EFT,Original Algo + BO,LU,423.5
+Greedy-EFT,Original Algo + BO,CNN_LIKE,431.0
+Greedy-EFT,Original Algo + BO,BA,307.5
+Greedy-EFT,Original Algo + BO,GEMM,488.0
+Greedy-EFT,Original Algo + BO,CHOLESKY,243.0
+Greedy-EFT,Original Algo + BO,AES_LIKE,333.0
+Greedy-EFT,Original Algo + Motifs + BO,SPARSE_SPMV,403.4
+Greedy-EFT,Original Algo + Motifs + BO,FFT,241.33
+Greedy-EFT,Original Algo + Motifs + BO,ER,257.5
+Greedy-EFT,Original Algo + Motifs + BO,STENCIL,227.25
+Greedy-EFT,Original Algo + Motifs + BO,MOTIF_JOIN,510.0
+Greedy-EFT,Original Algo + Motifs + BO,WS,812.0
+Greedy-EFT,Original Algo + Motifs + BO,LU,436.0
+Greedy-EFT,Original Algo + Motifs + BO,CNN_LIKE,427.0
+Greedy-EFT,Original Algo + Motifs + BO,BA,339.25
+Greedy-EFT,Original Algo + Motifs + BO,GEMM,494.0
+Greedy-EFT,Original Algo + Motifs + BO,CHOLESKY,267.0
+Greedy-EFT,Original Algo + Motifs + BO,AES_LIKE,346.0
+Greedy-EFT,Original Algo + Configs + BO (LLM for Weight Generation),SPARSE_SPMV,399.0
+Greedy-EFT,Original Algo + Configs + BO (LLM for Weight Generation),FFT,222.0
+Greedy-EFT,Original Algo + Configs + BO (LLM for Weight Generation),ER,243.75
+Greedy-EFT,Original Algo + Configs + BO (LLM for Weight Generation),STENCIL,217.5
+Greedy-EFT,Original Algo + Configs + BO (LLM for Weight Generation),MOTIF_JOIN,512.0
+Greedy-EFT,Original Algo + Configs + BO (LLM for Weight Generation),WS,805.0
+Greedy-EFT,Original Algo + Configs + BO (LLM for Weight Generation),LU,417.0
+Greedy-EFT,Original Algo + Configs + BO (LLM for Weight Generation),CNN_LIKE,427.0
+Greedy-EFT,Original Algo + Configs + BO (LLM for Weight Generation),BA,307.75
+Greedy-EFT,Original Algo + Configs + BO (LLM for Weight Generation),GEMM,489.0
+Greedy-EFT,Original Algo + Configs + BO (LLM for Weight Generation),CHOLESKY,235.0
+Greedy-EFT,Original Algo + Configs + BO (LLM for Weight Generation),AES_LIKE,378.0
+HEFT,Original Algo,SPARSE_SPMV,398.8
+HEFT,Original Algo,FFT,222.33
+HEFT,Original Algo,ER,242.25
+HEFT,Original Algo,STENCIL,217.0
+HEFT,Original Algo,MOTIF_JOIN,513.0
+HEFT,Original Algo,WS,803.5
+HEFT,Original Algo,LU,440.5
+HEFT,Original Algo,CNN_LIKE,431.0
+HEFT,Original Algo,BA,300.0
+HEFT,Original Algo,GEMM,488.0
+HEFT,Original Algo,CHOLESKY,244.0
+HEFT,Original Algo,AES_LIKE,350.0
+HEFT,Original Algo + Motifs,SPARSE_SPMV,405.6
+HEFT,Original Algo + Motifs,FFT,249.67
+HEFT,Original Algo + Motifs,ER,258.75
+HEFT,Original Algo + Motifs,STENCIL,249.25
+HEFT,Original Algo + Motifs,MOTIF_JOIN,513.0
+HEFT,Original Algo + Motifs,WS,803.5
+HEFT,Original Algo + Motifs,LU,447.5
+HEFT,Original Algo + Motifs,CNN_LIKE,431.0
+HEFT,Original Algo + Motifs,BA,300.5
+HEFT,Original Algo + Motifs,GEMM,492.0
+HEFT,Original Algo + Motifs,CHOLESKY,243.0
+HEFT,Original Algo + Motifs,AES_LIKE,355.0
+HEFT,Original Algo + BO,SPARSE_SPMV,398.8
+HEFT,Original Algo + BO,FFT,222.33
+HEFT,Original Algo + BO,ER,242.25
+HEFT,Original Algo + BO,STENCIL,217.0
+HEFT,Original Algo + BO,MOTIF_JOIN,513.0
+HEFT,Original Algo + BO,WS,803.5
+HEFT,Original Algo + BO,LU,440.5
+HEFT,Original Algo + BO,CNN_LIKE,431.0
+HEFT,Original Algo + BO,BA,300.0
+HEFT,Original Algo + BO,GEMM,488.0
+HEFT,Original Algo + BO,CHOLESKY,244.0
+HEFT,Original Algo + BO,AES_LIKE,350.0
+HEFT,Original Algo + Motifs + BO,SPARSE_SPMV,400.8
+HEFT,Original Algo + Motifs + BO,FFT,224.33
+HEFT,Original Algo + Motifs + BO,ER,245.0
+HEFT,Original Algo + Motifs + BO,STENCIL,214.25
+HEFT,Original Algo + Motifs + BO,MOTIF_JOIN,510.0
+HEFT,Original Algo + Motifs + BO,WS,804.0
+HEFT,Original Algo + Motifs + BO,LU,421.0
+HEFT,Original Algo + Motifs + BO,CNN_LIKE,427.0
+HEFT,Original Algo + Motifs + BO,BA,309.75
+HEFT,Original Algo + Motifs + BO,GEMM,492.0
+HEFT,Original Algo + Motifs + BO,CHOLESKY,240.0
+HEFT,Original Algo + Motifs + BO,AES_LIKE,377.0
+HEFT,Original Algo + Configs + BO (LLM for Weight Generation),SPARSE_SPMV,399.4
+HEFT,Original Algo + Configs + BO (LLM for Weight Generation),FFT,223.33
+HEFT,Original Algo + Configs + BO (LLM for Weight Generation),ER,240.5
+HEFT,Original Algo + Configs + BO (LLM for Weight Generation),STENCIL,216.0
+HEFT,Original Algo + Configs + BO (LLM for Weight Generation),MOTIF_JOIN,512.0
+HEFT,Original Algo + Configs + BO (LLM for Weight Generation),WS,807.0
+HEFT,Original Algo + Configs + BO (LLM for Weight Generation),LU,423.0
+HEFT,Original Algo + Configs + BO (LLM for Weight Generation),CNN_LIKE,427.0
+HEFT,Original Algo + Configs + BO (LLM for Weight Generation),BA,306.5
+HEFT,Original Algo + Configs + BO (LLM for Weight Generation),GEMM,489.0
+HEFT,Original Algo + Configs + BO (LLM for Weight Generation),CHOLESKY,243.0
+HEFT,Original Algo + Configs + BO (LLM for Weight Generation),AES_LIKE,372.0
+HOFT,Original Algo,SPARSE_SPMV,405.6
+HOFT,Original Algo,FFT,257.33
+HOFT,Original Algo,ER,251.0
+HOFT,Original Algo,STENCIL,223.75
+HOFT,Original Algo,MOTIF_JOIN,513.0
+HOFT,Original Algo,WS,803.5
+HOFT,Original Algo,LU,451.0
+HOFT,Original Algo,CNN_LIKE,431.0
+HOFT,Original Algo,BA,301.5
+HOFT,Original Algo,GEMM,489.0
+HOFT,Original Algo,CHOLESKY,244.0
+HOFT,Original Algo,AES_LIKE,376.0
+HOFT,Original Algo + Motifs,SPARSE_SPMV,406.4
+HOFT,Original Algo + Motifs,FFT,263.33
+HOFT,Original Algo + Motifs,ER,257.5
+HOFT,Original Algo + Motifs,STENCIL,252.5
+HOFT,Original Algo + Motifs,MOTIF_JOIN,513.0
+HOFT,Original Algo + Motifs,WS,803.5
+HOFT,Original Algo + Motifs,LU,455.0
+HOFT,Original Algo + Motifs,CNN_LIKE,431.0
+HOFT,Original Algo + Motifs,BA,300.5
+HOFT,Original Algo + Motifs,GEMM,492.0
+HOFT,Original Algo + Motifs,CHOLESKY,247.0
+HOFT,Original Algo + Motifs,AES_LIKE,362.0
+HOFT,Original Algo + BO,SPARSE_SPMV,400.8
+HOFT,Original Algo + BO,FFT,233.0
+HOFT,Original Algo + BO,ER,243.75
+HOFT,Original Algo + BO,STENCIL,216.25
+HOFT,Original Algo + BO,MOTIF_JOIN,512.0
+HOFT,Original Algo + BO,WS,805.0
+HOFT,Original Algo + BO,LU,424.5
+HOFT,Original Algo + BO,CNN_LIKE,427.0
+HOFT,Original Algo + BO,BA,308.0
+HOFT,Original Algo + BO,GEMM,491.0
+HOFT,Original Algo + BO,CHOLESKY,243.0
+HOFT,Original Algo + BO,AES_LIKE,369.0
+HOFT,Original Algo + Motifs + BO,SPARSE_SPMV,399.8
+HOFT,Original Algo + Motifs + BO,FFT,251.67
+HOFT,Original Algo + Motifs + BO,ER,250.0
+HOFT,Original Algo + Motifs + BO,STENCIL,237.0
+HOFT,Original Algo + Motifs + BO,MOTIF_JOIN,510.0
+HOFT,Original Algo + Motifs + BO,WS,803.5
+HOFT,Original Algo + Motifs + BO,LU,432.5
+HOFT,Original Algo + Motifs + BO,CNN_LIKE,427.0
+HOFT,Original Algo + Motifs + BO,BA,307.25
+HOFT,Original Algo + Motifs + BO,GEMM,490.0
+HOFT,Original Algo + Motifs + BO,CHOLESKY,235.0
+HOFT,Original Algo + Motifs + BO,AES_LIKE,362.0
+HOFT,Original Algo + Configs + BO (LLM for Weight Generation),SPARSE_SPMV,414.2
+HOFT,Original Algo + Configs + BO (LLM for Weight Generation),FFT,234.33
+HOFT,Original Algo + Configs + BO (LLM for Weight Generation),ER,256.0
+HOFT,Original Algo + Configs + BO (LLM for Weight Generation),STENCIL,223.75
+HOFT,Original Algo + Configs + BO (LLM for Weight Generation),MOTIF_JOIN,530.0
+HOFT,Original Algo + Configs + BO (LLM for Weight Generation),WS,812.0
+HOFT,Original Algo + Configs + BO (LLM for Weight Generation),LU,435.0
+HOFT,Original Algo + Configs + BO (LLM for Weight Generation),CNN_LIKE,432.0
+HOFT,Original Algo + Configs + BO (LLM for Weight Generation),BA,312.0
+HOFT,Original Algo + Configs + BO (LLM for Weight Generation),GEMM,504.0
+HOFT,Original Algo + Configs + BO (LLM for Weight Generation),CHOLESKY,241.0
+HOFT,Original Algo + Configs + BO (LLM for Weight Generation),AES_LIKE,356.0
+CPOP,Original Algo,SPARSE_SPMV,409.2
+CPOP,Original Algo,FFT,281.33
+CPOP,Original Algo,ER,273.25
+CPOP,Original Algo,STENCIL,248.0
+CPOP,Original Algo,MOTIF_JOIN,510.0
+CPOP,Original Algo,WS,803.5
+CPOP,Original Algo,LU,480.0
+CPOP,Original Algo,CNN_LIKE,424.0
+CPOP,Original Algo,BA,325.25
+CPOP,Original Algo,GEMM,492.0
+CPOP,Original Algo,CHOLESKY,274.0
+CPOP,Original Algo,AES_LIKE,373.0
+CPOP,Original Algo + Motifs,SPARSE_SPMV,408.0
+CPOP,Original Algo + Motifs,FFT,272.0
+CPOP,Original Algo + Motifs,ER,271.75
+CPOP,Original Algo + Motifs,STENCIL,239.75
+CPOP,Original Algo + Motifs,MOTIF_JOIN,510.0
+CPOP,Original Algo + Motifs,WS,803.5
+CPOP,Original Algo + Motifs,LU,479.5
+CPOP,Original Algo + Motifs,CNN_LIKE,424.0
+CPOP,Original Algo + Motifs,BA,309.25
+CPOP,Original Algo + Motifs,GEMM,493.0
+CPOP,Original Algo + Motifs,CHOLESKY,268.0
+CPOP,Original Algo + Motifs,AES_LIKE,368.0
+CPOP,Original Algo + BO,SPARSE_SPMV,400.2
+CPOP,Original Algo + BO,FFT,221.33
+CPOP,Original Algo + BO,ER,241.75
+CPOP,Original Algo + BO,STENCIL,215.5
+CPOP,Original Algo + BO,MOTIF_JOIN,510.0
+CPOP,Original Algo + BO,WS,805.5
+CPOP,Original Algo + BO,LU,420.5
+CPOP,Original Algo + BO,CNN_LIKE,427.0
+CPOP,Original Algo + BO,BA,312.0
+CPOP,Original Algo + BO,GEMM,488.0
+CPOP,Original Algo + BO,CHOLESKY,234.0
+CPOP,Original Algo + BO,AES_LIKE,363.0
+CPOP,Original Algo + Motifs + BO,SPARSE_SPMV,404.4
+CPOP,Original Algo + Motifs + BO,FFT,256.67
+CPOP,Original Algo + Motifs + BO,ER,253.25
+CPOP,Original Algo + Motifs + BO,STENCIL,231.5
+CPOP,Original Algo + Motifs + BO,MOTIF_JOIN,512.0
+CPOP,Original Algo + Motifs + BO,WS,810.0
+CPOP,Original Algo + Motifs + BO,LU,439.0
+CPOP,Original Algo + Motifs + BO,CNN_LIKE,427.0
+CPOP,Original Algo + Motifs + BO,BA,348.0
+CPOP,Original Algo + Motifs + BO,GEMM,494.0
+CPOP,Original Algo + Motifs + BO,CHOLESKY,254.0
+CPOP,Original Algo + Motifs + BO,AES_LIKE,345.0
+CPOP,Original Algo + Configs + BO (LLM for Weight Generation),SPARSE_SPMV,399.4
+CPOP,Original Algo + Configs + BO (LLM for Weight Generation),FFT,223.33
+CPOP,Original Algo + Configs + BO (LLM for Weight Generation),ER,240.5
+CPOP,Original Algo + Configs + BO (LLM for Weight Generation),STENCIL,216.0
+CPOP,Original Algo + Configs + BO (LLM for Weight Generation),MOTIF_JOIN,512.0
+CPOP,Original Algo + Configs + BO (LLM for Weight Generation),WS,807.0
+CPOP,Original Algo + Configs + BO (LLM for Weight Generation),LU,423.0
+CPOP,Original Algo + Configs + BO (LLM for Weight Generation),CNN_LIKE,427.0
+CPOP,Original Algo + Configs + BO (LLM for Weight Generation),BA,306.5
+CPOP,Original Algo + Configs + BO (LLM for Weight Generation),GEMM,489.0
+CPOP,Original Algo + Configs + BO (LLM for Weight Generation),CHOLESKY,243.0
+CPOP,Original Algo + Configs + BO (LLM for Weight Generation),AES_LIKE,372.0
+PEFT,Original Algo,SPARSE_SPMV,409.8
+PEFT,Original Algo,FFT,268.33
+PEFT,Original Algo,ER,255.25
+PEFT,Original Algo,STENCIL,233.5
+PEFT,Original Algo,MOTIF_JOIN,512.0
+PEFT,Original Algo,WS,803.5
+PEFT,Original Algo,LU,457.0
+PEFT,Original Algo,CNN_LIKE,427.0
+PEFT,Original Algo,BA,308.5
+PEFT,Original Algo,GEMM,501.0
+PEFT,Original Algo,CHOLESKY,253.0
+PEFT,Original Algo,AES_LIKE,362.0
+PEFT,Original Algo + Motifs,SPARSE_SPMV,410.0
+PEFT,Original Algo + Motifs,FFT,276.0
+PEFT,Original Algo + Motifs,ER,270.25
+PEFT,Original Algo + Motifs,STENCIL,244.75
+PEFT,Original Algo + Motifs,MOTIF_JOIN,512.0
+PEFT,Original Algo + Motifs,WS,803.5
+PEFT,Original Algo + Motifs,LU,456.5
+PEFT,Original Algo + Motifs,CNN_LIKE,427.0
+PEFT,Original Algo + Motifs,BA,306.75
+PEFT,Original Algo + Motifs,GEMM,505.0
+PEFT,Original Algo + Motifs,CHOLESKY,248.0
+PEFT,Original Algo + Motifs,AES_LIKE,360.0
+PEFT,Original Algo + BO,SPARSE_SPMV,399.6
+PEFT,Original Algo + BO,FFT,221.67
+PEFT,Original Algo + BO,ER,241.0
+PEFT,Original Algo + BO,STENCIL,217.25
+PEFT,Original Algo + BO,MOTIF_JOIN,512.0
+PEFT,Original Algo + BO,WS,805.0
+PEFT,Original Algo + BO,LU,422.5
+PEFT,Original Algo + BO,CNN_LIKE,427.0
+PEFT,Original Algo + BO,BA,307.0
+PEFT,Original Algo + BO,GEMM,489.0
+PEFT,Original Algo + BO,CHOLESKY,234.0
+PEFT,Original Algo + BO,AES_LIKE,345.0
+PEFT,Original Algo + Motifs + BO,SPARSE_SPMV,399.2
+PEFT,Original Algo + Motifs + BO,FFT,223.0
+PEFT,Original Algo + Motifs + BO,ER,244.25
+PEFT,Original Algo + Motifs + BO,STENCIL,215.0
+PEFT,Original Algo + Motifs + BO,MOTIF_JOIN,512.0
+PEFT,Original Algo + Motifs + BO,WS,810.0
+PEFT,Original Algo + Motifs + BO,LU,425.0
+PEFT,Original Algo + Motifs + BO,CNN_LIKE,427.0
+PEFT,Original Algo + Motifs + BO,BA,329.5
+PEFT,Original Algo + Motifs + BO,GEMM,488.0
+PEFT,Original Algo + Motifs + BO,CHOLESKY,239.0
+PEFT,Original Algo + Motifs + BO,AES_LIKE,370.0
+PEFT,Original Algo + Configs + BO (LLM for Weight Generation),SPARSE_SPMV,399.4
+PEFT,Original Algo + Configs + BO (LLM for Weight Generation),FFT,223.33
+PEFT,Original Algo + Configs + BO (LLM for Weight Generation),ER,240.5
+PEFT,Original Algo + Configs + BO (LLM for Weight Generation),STENCIL,216.0
+PEFT,Original Algo + Configs + BO (LLM for Weight Generation),MOTIF_JOIN,512.0
+PEFT,Original Algo + Configs + BO (LLM for Weight Generation),WS,807.0
+PEFT,Original Algo + Configs + BO (LLM for Weight Generation),LU,423.0
+PEFT,Original Algo + Configs + BO (LLM for Weight Generation),CNN_LIKE,427.0
+PEFT,Original Algo + Configs + BO (LLM for Weight Generation),BA,306.5
+PEFT,Original Algo + Configs + BO (LLM for Weight Generation),GEMM,489.0
+PEFT,Original Algo + Configs + BO (LLM for Weight Generation),CHOLESKY,243.0
+PEFT,Original Algo + Configs + BO (LLM for Weight Generation),AES_LIKE,372.0
+Decima,Original Algo,SPARSE_SPMV,404.6
+Decima,Original Algo,FFT,267.67
+Decima,Original Algo,ER,257.25
+Decima,Original Algo,STENCIL,239.25
+Decima,Original Algo,MOTIF_JOIN,521.0
+Decima,Original Algo,WS,803.5
+Decima,Original Algo,LU,449.5
+Decima,Original Algo,CNN_LIKE,431.0
+Decima,Original Algo,BA,312.0
+Decima,Original Algo,GEMM,489.0
+Decima,Original Algo,CHOLESKY,244.0
+Decima,Original Algo,AES_LIKE,376.0
+Decima,Original Algo + Motifs,SPARSE_SPMV,407.8
+Decima,Original Algo + Motifs,FFT,288.0
+Decima,Original Algo + Motifs,ER,266.5
+Decima,Original Algo + Motifs,STENCIL,253.75
+Decima,Original Algo + Motifs,MOTIF_JOIN,521.0
+Decima,Original Algo + Motifs,WS,804.0
+Decima,Original Algo + Motifs,LU,455.0
+Decima,Original Algo + Motifs,CNN_LIKE,431.0
+Decima,Original Algo + Motifs,BA,308.25
+Decima,Original Algo + Motifs,GEMM,493.0
+Decima,Original Algo + Motifs,CHOLESKY,244.0
+Decima,Original Algo + Motifs,AES_LIKE,378.0
+Decima,Original Algo + BO,SPARSE_SPMV,400.4
+Decima,Original Algo + BO,FFT,223.33
+Decima,Original Algo + BO,ER,247.0
+Decima,Original Algo + BO,STENCIL,218.5
+Decima,Original Algo + BO,MOTIF_JOIN,510.0
+Decima,Original Algo + BO,WS,803.5
+Decima,Original Algo + BO,LU,422.5
+Decima,Original Algo + BO,CNN_LIKE,427.0
+Decima,Original Algo + BO,BA,313.75
+Decima,Original Algo + BO,GEMM,491.0
+Decima,Original Algo + BO,CHOLESKY,239.0
+Decima,Original Algo + BO,AES_LIKE,327.0
+Decima,Original Algo + Motifs + BO,SPARSE_SPMV,400.4
+Decima,Original Algo + Motifs + BO,FFT,250.33
+Decima,Original Algo + Motifs + BO,ER,249.0
+Decima,Original Algo + Motifs + BO,STENCIL,241.0
+Decima,Original Algo + Motifs + BO,MOTIF_JOIN,521.0
+Decima,Original Algo + Motifs + BO,WS,809.0
+Decima,Original Algo + Motifs + BO,LU,431.5
+Decima,Original Algo + Motifs + BO,CNN_LIKE,435.0
+Decima,Original Algo + Motifs + BO,BA,342.25
+Decima,Original Algo + Motifs + BO,GEMM,490.0
+Decima,Original Algo + Motifs + BO,CHOLESKY,239.0
+Decima,Original Algo + Motifs + BO,AES_LIKE,374.0
+Decima,Original Algo + Configs + BO (LLM for Weight Generation),SPARSE_SPMV,399.4
+Decima,Original Algo + Configs + BO (LLM for Weight Generation),FFT,223.33
+Decima,Original Algo + Configs + BO (LLM for Weight Generation),ER,240.5
+Decima,Original Algo + Configs + BO (LLM for Weight Generation),STENCIL,216.0
+Decima,Original Algo + Configs + BO (LLM for Weight Generation),MOTIF_JOIN,512.0
+Decima,Original Algo + Configs + BO (LLM for Weight Generation),WS,807.0
+Decima,Original Algo + Configs + BO (LLM for Weight Generation),LU,423.0
+Decima,Original Algo + Configs + BO (LLM for Weight Generation),CNN_LIKE,427.0
+Decima,Original Algo + Configs + BO (LLM for Weight Generation),BA,306.5
+Decima,Original Algo + Configs + BO (LLM for Weight Generation),GEMM,489.0
+Decima,Original Algo + Configs + BO (LLM for Weight Generation),CHOLESKY,243.0
+Decima,Original Algo + Configs + BO (LLM for Weight Generation),AES_LIKE,372.0
+LLM,Original Algo,SPARSE_SPMV,402.4
+LLM,Original Algo,FFT,253.0
+LLM,Original Algo,ER,249.0
+LLM,Original Algo,STENCIL,241.25
+LLM,Original Algo,MOTIF_JOIN,521.0
+LLM,Original Algo,WS,805.5
+LLM,Original Algo,LU,447.5
+LLM,Original Algo,CNN_LIKE,431.0
+LLM,Original Algo,BA,300.5
+LLM,Original Algo,GEMM,488.0
+LLM,Original Algo,CHOLESKY,242.0
+LLM,Original Algo,AES_LIKE,366.0
+LLM,Original Algo + Motifs,SPARSE_SPMV,408.2
+LLM,Original Algo + Motifs,FFT,265.67
+LLM,Original Algo + Motifs,ER,262.25
+LLM,Original Algo + Motifs,STENCIL,254.5
+LLM,Original Algo + Motifs,MOTIF_JOIN,521.0
+LLM,Original Algo + Motifs,WS,805.5
+LLM,Original Algo + Motifs,LU,452.5
+LLM,Original Algo + Motifs,CNN_LIKE,431.0
+LLM,Original Algo + Motifs,BA,302.0
+LLM,Original Algo + Motifs,GEMM,498.0
+LLM,Original Algo + Motifs,CHOLESKY,242.0
+LLM,Original Algo + Motifs,AES_LIKE,366.0
+LLM,Original Algo + BO,SPARSE_SPMV,402.0
+LLM,Original Algo + BO,FFT,230.0
+LLM,Original Algo + BO,ER,246.0
+LLM,Original Algo + BO,STENCIL,217.0
+LLM,Original Algo + BO,MOTIF_JOIN,510.0
+LLM,Original Algo + BO,WS,803.5
+LLM,Original Algo + BO,LU,425.0
+LLM,Original Algo + BO,CNN_LIKE,427.0
+LLM,Original Algo + BO,BA,309.75
+LLM,Original Algo + BO,GEMM,489.0
+LLM,Original Algo + BO,CHOLESKY,249.0
+LLM,Original Algo + BO,AES_LIKE,342.0
+LLM,Original Algo + Motifs + BO,SPARSE_SPMV,400.4
+LLM,Original Algo + Motifs + BO,FFT,239.0
+LLM,Original Algo + Motifs + BO,ER,241.75
+LLM,Original Algo + Motifs + BO,STENCIL,217.5
+LLM,Original Algo + Motifs + BO,MOTIF_JOIN,512.0
+LLM,Original Algo + Motifs + BO,WS,810.0
+LLM,Original Algo + Motifs + BO,LU,429.0
+LLM,Original Algo + Motifs + BO,CNN_LIKE,427.0
+LLM,Original Algo + Motifs + BO,BA,334.75
+LLM,Original Algo + Motifs + BO,GEMM,488.0
+LLM,Original Algo + Motifs + BO,CHOLESKY,236.0
+LLM,Original Algo + Motifs + BO,AES_LIKE,344.0
+LLM,Original Algo + Configs + BO (LLM for Weight Generation),SPARSE_SPMV,406.4
+LLM,Original Algo + Configs + BO (LLM for Weight Generation),FFT,237.33
+LLM,Original Algo + Configs + BO (LLM for Weight Generation),ER,239.75
+LLM,Original Algo + Configs + BO (LLM for Weight Generation),STENCIL,223.5
+LLM,Original Algo + Configs + BO (LLM for Weight Generation),MOTIF_JOIN,530.0
+LLM,Original Algo + Configs + BO (LLM for Weight Generation),WS,812.0
+LLM,Original Algo + Configs + BO (LLM for Weight Generation),LU,426.5
+LLM,Original Algo + Configs + BO (LLM for Weight Generation),CNN_LIKE,432.0
+LLM,Original Algo + Configs + BO (LLM for Weight Generation),BA,306.0
+LLM,Original Algo + Configs + BO (LLM for Weight Generation),GEMM,502.0
+LLM,Original Algo + Configs + BO (LLM for Weight Generation),CHOLESKY,244.0
+LLM,Original Algo + Configs + BO (LLM for Weight Generation),AES_LIKE,344.0
