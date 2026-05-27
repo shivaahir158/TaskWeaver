@@ -14,7 +14,7 @@ The objective is to reduce overall DAG makespan while preserving precedence cons
 
 ## Scheduling Results
 
-| Algorithm | Original Algo | Original Algo + Motifs | Original Algo + BO | Original Algo + Motifs + BO | Original Algo + Configs + BO (LLM) | % Improvement |
+| Algorithm | Original Algo (classic, without my experiments) | Original Algo + Motifs (no BO + LLM) | Original Algo + BO (no LLM + Motifs) | Original Algo + Motifs + BO (no LLM) | Original Algo + Configs + BO (LLM) | % Improvement |
 |-----------|---------------|---------------|---------------|---------------|---------------|-------------|
 | GNN | 325.2 ± 2.8 | 327.8 ± 3.1 | 322.6 ± 2.7 | 318.9 ± 2.4 | 320.4 ± 2.6 | **1.5%** |
 | Greedy-EFT | 362.5 ± 3.2 | 356.4 ± 3.0 | 334.8 ± 2.9 | 321.7 ± 2.6 | 318.6 ± 2.5 | **12.1%** |
