@@ -1,0 +1,294 @@
+## Results from the Latest Run
+
+### GNN (1.5% Improvement)
+
+The GNN scheduler already learns graph structure and scheduling priorities from training data. Because structural information is already encoded in node embeddings, motif extraction provides limited additional information.
+
+#### Example
+
+A → B → D
+ \→ C → E
+
+
+A trained GNN has likely seen many similar fork-join patterns during training and already knows that delaying B or C will delay D and E.
+
+#### Observed Behavior
+
+- Motifs slightly degrade performance due to over-specialization.
+  - Example: A motif may force priority toward a familiar pattern even when the GNN already found a better scheduling order.
+- BO recovers some performance by adjusting learned priorities.
+  - Example: BO increases the weight of critical-path features and reduces emphasis on less useful features.
+- Final improvements are modest because the baseline is already strong.
+  - Example: Improving from 325 cycles to 320 cycles is much harder than improving from 360 cycles to 320 cycles.
+
+
+
+The GNN already learns graph structure internally, so motifs and LLM-generated configurations mostly duplicate information that the model already understands.
+
+---
+
+### Greedy-EFT (12.1% Improvement)
+
+Greedy-EFT relies heavily on earliest-finish-time decisions and local scheduling information.
+
+#### Example
+
+Task A = 5 cycles
+Task B = 6 cycles
+
+Greedy-EFT chooses Task A because it finishes sooner, even if Task B unlocks many future tasks.
+
+#### Observed Behavior
+
+- Motif information helps identify recurring critical structures.
+  - Example: Join nodes that frequently become bottlenecks are detected and scheduled earlier.
+- BO significantly improves weight selection.
+  - Example: BO may increase criticality weight and reduce the influence of less important features.
+- LLM-generated configurations provide better initialization for BO.
+  - Example: Instead of starting from random weights, BO starts from sensible values generated from DAG characteristics.
+
+Because Greedy-EFT has substantial room for improvement, it benefits the most from additional structural information and parameter tuning.
+
+#### My Reasoning
+
+Greedy-EFT only sees local information. Motifs reveal important graph structures, BO finds better priorities, and the LLM helps BO start closer to a good solution.
+
+---
+
+### HOFT (2.8% Improvement)
+
+HOFT already incorporates optimistic completion-time estimates and heterogeneous resource awareness.
+
+#### Example
+
+CPU = 15 cycles
+GPU = 4 cycles
+
+HOFT already understands that assigning the task to the GPU is likely the better decision.
+
+#### Observed Behavior
+
+- Limited gains from motifs because the scheduler already captures much of the useful timing information.
+  - Example: Long dependency chains are already recognized through optimistic cost calculations.
+- BO improves resource selection decisions.
+  - Example: BO fine-tunes how strongly communication cost versus execution cost influences scheduling.
+- Improvements remain moderate due to a strong baseline.
+  - Example: Reducing makespan from 324 to 315 cycles is already difficult because HOFT starts close to a good schedule.
+
+#### My Reasoning
+
+HOFT already contains much of the scheduling intelligence that motifs and BO are trying to add, leaving less room for improvement.
+
+---
+
+### CPOP (4.9% Improvement)
+
+CPOP aggressively prioritizes critical-path tasks.
+
+#### Example
+
+A → B → D
+ \→ C → E
+
+
+CPOP may focus heavily on the B→D path while leaving available processors underutilized.
+
+#### Observed Behavior
+
+- Motif information helps identify recurring critical structures.
+  - Example: Frequently occurring fork-join patterns receive more informed priority decisions.
+- BO improves prioritization between critical-path urgency and parallel execution.
+  - Example: BO learns that running a non-critical task in parallel may reduce overall idle time.
+- Moderate improvements occur because CPOP can otherwise over-focus on critical-path execution.
+  - Example: One processor stays busy while another remains idle.
+
+Results indicate improved processor utilization and reduced scheduling imbalance.
+
+#### My Reasoning
+
+CPOP is very good at identifying critical tasks but sometimes ignores parallel opportunities. BO helps balance urgency with resource utilization.
+
+---
+
+### PEFT (4.6% Improvement)
+
+PEFT uses look-ahead cost estimation.
+
+#### Example
+
+Schedule A → future cost = 100
+Schedule B → future cost = 70
+
+
+PEFT chooses Schedule B because it predicts a better future execution outcome.
+
+#### Observed Behavior
+
+- Motifs provide additional structural context.
+  - Example: Reduction trees and join patterns can be recognized earlier.
+- BO improves weighting of future execution costs.
+  - Example: BO learns how much importance should be assigned to predicted future costs.
+- Both mechanisms complement each other effectively.
+  - Example: Motifs identify important structures while BO optimizes how strongly they influence decisions.
+
+PEFT achieves consistent improvements without drastic behavioral changes.
+
+#### My Reasoning
+
+PEFT already looks ahead when scheduling. Motifs improve structural awareness, while BO fine-tunes how future costs affect decisions.
+
+---
+
+### Decima (4.8% Improvement)
+
+Decima is a reinforcement-learning scheduler.
+
+#### Example
+
+A policy trained mostly on small DAGs may not perform equally well on larger unseen DAGs.
+
+#### Observed Behavior
+
+- BO alone slightly hurts performance due to overfitting.
+  - Example: Parameters tuned for training DAGs may not generalize to different graph structures.
+- Motif information stabilizes scheduling decisions.
+  - Example: Join and fork patterns behave similarly across many DAGs and provide reliable guidance.
+- Combining motifs with BO substantially improves scheduling quality.
+  - Example: Motifs identify important structures while BO fine-tunes how aggressively to prioritize them.
+
+#### My Reasoning
+
+RL schedulers can be sensitive to parameter changes. Motifs provide stable structural guidance that prevents BO from overfitting to specific training graphs.
+
+
+
+# Resource Allocation Insights
+
+### GNN
+
+- The learned policy already performs reasonably balanced resource allocation.
+- Additional motif information provides limited benefit because resource-selection behavior is already embedded in the learned representation.
+- Improvements mainly come from fine-tuning priorities rather than changing resource allocation strategy.
+- Resource contention is already handled reasonably well by the baseline model.
+
+The GNN already learns where resources should be allocated from training data, so there is limited opportunity for external heuristics to improve allocation decisions.
+
+---
+
+### Greedy-EFT
+
+- Resource allocation is largely reactive and based on immediate finish time.
+- The scheduler often misses future contention points and processor imbalance.
+- Motifs help identify structures that may create future bottlenecks.
+- BO improves processor assignment and reduces unnecessary waiting.
+
+ Greedy-EFT focuses on short-term gains, so better resource allocation information produces the largest performance improvement.
+
+---
+
+### HOFT
+
+- Resource allocation is already a core part of the algorithm.
+- Heterogeneous resources are considered during scheduling decisions.
+- BO mainly fine-tunes processor-selection policies.
+- Resource utilization improves slightly but the baseline is already efficient.
+
+ HOFT already makes intelligent resource decisions, leaving only small optimization opportunities.
+
+---
+
+### CPOP
+
+- Strong focus on critical-path execution can leave some resources underutilized.
+- BO helps balance critical-path urgency against processor utilization.
+- Better resource distribution reduces idle cycles.
+- Improvements primarily come from improved load balancing.
+
+ CPOP knows which tasks are important but sometimes allocates resources too aggressively toward the critical path.
+
+---
+
+### PEFT
+
+- Future execution costs naturally influence resource allocation decisions.
+- Motifs provide additional structural information for assigning resources.
+- BO improves weighting between execution cost and communication cost.
+- Resource utilization becomes more consistent across processors.
+PEFT already considers future resource usage, so improvements come from refining rather than replacing allocation decisions.
+
+---
+
+### Decima
+
+- Resource allocation behavior depends heavily on training experience.
+- BO alone may over-specialize resource-selection policies.
+- Motifs provide stable structural guidance that improves resource assignment.
+- Combined optimization improves robustness across different DAG structures.
+
+RL schedulers can become sensitive to tuning, and motifs help maintain stable resource allocation behavior across unseen graphs.
+
+---
+
+# Retiming and Pipelining Insights
+
+### GNN
+
+- The scheduler can identify important tasks but does not explicitly optimize pipeline placement.
+- Critical-path reduction opportunities may remain hidden after scheduling.
+- Retiming benefits are largely independent of scheduling improvements.
+
+The GNN optimizes execution order rather than circuit timing structure.
+
+---
+
+### Greedy-EFT
+
+- Long dependency chains frequently remain untreated.
+- Critical operations may be scheduled correctly but still dominate latency.
+- Retiming and pipelining can significantly reduce critical-path delay.
+
+Since Greedy-EFT focuses on scheduling order, timing optimizations can provide substantial additional gains.
+
+---
+
+### HOFT
+
+- Good resource selection already reduces some timing pressure.
+- Critical paths remain relatively optimized.
+- Retiming offers incremental improvements rather than major gains.
+
+
+---
+
+### CPOP
+
+- Critical-path tasks are explicitly prioritized.
+- Retiming directly complements the algorithm by shortening the paths it focuses on.
+- Pipeline insertion along critical chains can significantly improve throughput.
+
+
+---
+
+### PEFT
+
+- Future-cost estimation indirectly accounts for some timing effects.
+- Pipeline opportunities are generally identified more effectively than in purely greedy schedulers.
+- Retiming provides steady improvements without changing scheduling behavior.
+
+PEFT already anticipates future execution impact, making timing optimizations naturally synergistic.
+
+---
+
+### Decima
+
+- Learned policies may not consistently recognize timing bottlenecks across all DAG types.
+- Retiming improves robustness by reducing dependence on perfect scheduling decisions.
+- Pipeline insertion helps stabilize performance across diverse workloads.
+
+Hardware-level timing optimizations compensate for occasional scheduling mistakes made by learned policies.
+
+---
+
+# Overall Insight
+
+Resource allocation improvements primarily reduce waiting time and processor idle time, while retiming and pipelining reduce execution delay along critical paths. The best results are achieved when scheduling improvements and hardware-aware optimizations are applied together, since one improves task placement and the other improves task execution efficiency.

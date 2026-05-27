@@ -25,7 +25,7 @@ The objective is to reduce overall DAG makespan while preserving precedence cons
 
 ---
 
-## Why These Results Make Sense
+## Results
 
 ### GNN (1.5% Improvement)
 
